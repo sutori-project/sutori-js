@@ -17,7 +17,7 @@ groundwork for building these sorts of things.
 
 VNS has no external dependencies. It is written in TypeScript, however the repo
 includes pre-compiled and minified JavaScript to make things easier. So you can
-just copy dist/vns.min.js into your project folder, then reference it with a
+just copy (dist/vns.min.js) into your project folder, then reference it with a
 script tag like so:
 
 ```
@@ -64,19 +64,21 @@ engine.GotoMomentID(option.Target);
 or by moving the cursor forward like this:
 
 ```
-engine.GotoNextMoment()
+engine.GotoNextMoment();
 ```
 
 
 ## Creating Data
 
 Creating a document is quite simple. I recommend checking out the first example
-found at examples/example1_data.xml to demonstrate how to lay things out.
+found at (examples/example1_data.xml) to demonstrate how to lay things out.
 
 You can also create a document from pure JavaScript like this:
 
 ```
-
+const extraMoment = new VnsMoment();
+extraMoment.AddText(culture, "This is a bonus moment!");
+doc.AddMoment(extraMoment);
 ```
 
 
@@ -107,3 +109,7 @@ npm build
 This was created originally to figure out how to add branched sequencing to the
 Xentu game engine. However it turns out VNS has a lot of uses in other situations
 too.
+
+Thanks for checking out the project, and I hope you find it useful.
+
+Kodaloid
