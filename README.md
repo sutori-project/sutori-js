@@ -17,7 +17,7 @@ groundwork for building these sorts of things.
 
 VNS has no external dependencies. It is written in TypeScript, however the repo
 includes pre-compiled and minified JavaScript to make things easier. So you can
-just copy [dist/vns.min.js](dist/vns.min.js) into your project folder, then reference it with a
+just copy [dist/vns.min.js](https://raw.githubusercontent.com/kodaloid/vns-js/main/dist/vns.min.js) (right-click and save link as...) into your project folder, then reference it with a
 script tag like so:
 
 ```
@@ -71,7 +71,7 @@ engine.GotoNextMoment();
 ## Creating Data
 
 Creating a document is quite simple. I recommend checking out the first example
-found at [examples/example1_data.xml](examples/example1_data.xml) to demonstrate how to lay things out.
+found at [examples/example1_data.xml](https://raw.githubusercontent.com/kodaloid/vns-js/main/examples/example1_data.xml) (right-click and save link as...) to demonstrate how to lay things out.
 
 You can also create a document from pure JavaScript like this:
 
