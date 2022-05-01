@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+</head>
+<body>
+
+	<div id="dialog0"></div>
+	<hr />
+	<p>Refresh (F5) page to start again.</p>
+    
+	<script src="../dist/vns.min.js"></script>
+	<script>
+		document.addEventListener("DOMContentLoaded", async function() {
+			
+			// load in a document.
+			const doc = await VnsDocument.LoadXml("example1_data.xml");
+			
+			// create a server engine.
+			const engine = window.vns = new VnsEngine(doc);
+			
+			// record which culture we wish to use when displaying multimedia. 
+			const culture = VnsCulture.None;
+
+
+			// example of how to add another moment in code.
+			const extraMoment = new VnsMoment();
+			extraMoment.AddText(culture, "This is a bonus moment!");
+			doc.AddMoment(extraMoment);
+
+			
+			// handle what happens when the server challenges for a response.
+			engine.HandleChallenge = function(event) {
+				const dialog = document.getElementById('dialog0');
+				dialog.innerHTML = '';
+
+				// add images.
+				event.GetImages(culture).forEach(imageElement => {
+					const img = document.createElement('img');
+					img.src = imageElement.Src;
+					dialog.appendChild(img); 
+				});
+
+				// add text.
+				event.GetText(culture).forEach(textElement => {
+					const p = document.createElement('p');
+					p.textContent = textElement.Text;
+					dialog.appendChild(p); 
+				});
+
+				// add options.
+				const options = event.GetOptions(culture);
+				options.forEach(optionElement => {
+					const btn = document.createElement('button');
+					btn.textContent = optionElement.Text;
+					btn.onclick = function() {
+						engine.GotoMomentID(optionElement.Target);
+					};
+					dialog.appendChild(btn);
+				});
+			
+				// handle what happens when there are no options.
+				if (options.length == 0) {
+					// add a next button.
+					const btn = document.createElement('button');
+					btn.textContent = "Next Moment";
+					btn.onclick = function() {
+						engine.GotoNextMoment();
+					};
+					dialog.appendChild(btn);
+				}
+			};
+
+			engine.Play();
+		});
+	</script>
+
+</body>
+</html>

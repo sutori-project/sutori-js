@@ -1,0 +1,15 @@
+{
+	"compilerOptions": {
+		"module": "amd",
+		"target": "es2017",
+		"sourceMap": true,
+		"allowJs": true,
+		"outFile": "dist/vns.js"
+	},
+	"include": [
+		"src/**/*"
+	],
+	"exclude": [
+		"node_modules",
+	]
+}

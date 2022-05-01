@@ -1,0 +1,35 @@
+{
+	"name": "vns-js",
+	"version": "0.0.1",
+	"homepage": "https://github.com/kodaloid/vns-js",
+	"author": {
+		"name": "Steve Bailey (kodaloid)",
+		"email": "steve@kodaloid.com",
+		"url": "https://kodaloid.com"
+	},
+	"description": "A Challenge Response Sequencer for building interlinking chains of multimedia.",
+	"main": "dist/vns-js.min.js",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/kodaloid/vns-js.git"
+	},
+	"license": "MIT",
+	"keywords": [
+		"js",
+		"sequencer",
+		"framework"
+	],
+	"bugs": {
+		"url": "https://github.com/kodaloid/vns-js/issues"
+	},
+	"scripts": {
+		"build": "tsc -p . && jsmin -o dist/vns.min.js dist/vns.js"
+	},
+   "files": [
+		"src",
+		"dist",
+		"examples",
+		"LICENSE",
+		"README.md"
+   ]
+}

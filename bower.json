@@ -1,0 +1,13 @@
+{
+	"name": "vns-js",
+	"version": "0.0.1",
+	"homepage": "https://github.com/kodaloid/vns-js",
+	"authors": ["Steve Bailey (kodaloid) <steve@kodaloid.com>"],
+	"description": "A Challenge Response Sequencer for building interlinking chains of multimedia.",
+	"main": "dist/vns-js.min.js",
+	"keywords": ["js", "sequencer", "framework"],
+	"license": "MIT",
+	"ignore": [
+	  "**/.*"
+	]
+ }
