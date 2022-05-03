@@ -10,12 +10,40 @@ class VnsDocument {
 	}
 
 
+	/**
+	 * Load a VnsDocument from an XML file.
+	 * @param uri The uri location of the XML file to load.
+	 * @returns The loaded document.
+	 */
 	static async LoadXml(uri: string) {
-		const response = await fetch(uri);
-		const xml_raw = await response.text();
-		const xml_parser = new DOMParser();
-		const xml = xml_parser.parseFromString(xml_raw, "text/xml");
+		// create a new document.
 		const result = new VnsDocument();
+		// load the document here.
+		result.AddMomentsFromXmlUri(uri);
+		// return the loaded document.
+		return result;
+	}
+
+
+	/**
+	 * Append moments from an XML file.
+	 * @param uri The uri location of the XML file to load.
+	 */
+	async AddMomentsFromXmlUri(uri: string) {
+		const response = await fetch(uri);
+		const raw_xml = await response.text();
+		await this.AddMomentsFromXml(raw_xml);
+	}
+
+
+	/**
+	 * Append moments from a raw XML string.
+	 * @param raw_xml The raw XML string to parse.
+	 */
+	async AddMomentsFromXml(raw_xml: string) {
+		const xml_parser = new DOMParser();
+		const xml = xml_parser.parseFromString(raw_xml, "text/xml");
+		const self = this;
 
 		xml.querySelectorAll('moments moment').forEach((moment_e: HTMLElement) => {
 			const moment = new VnsMoment();
@@ -47,14 +75,15 @@ class VnsDocument {
 				}
 			});
 
-			result.Moments.push(moment);
+			self.Moments.push(moment);
 		});
-
-		// load the document here.
-		return result;
 	}
 
 
+	/**
+	 * Add a moment instance to this document.
+	 * @param moment The moment instance.
+	 */
 	AddMoment(moment: VnsMoment) {
 		this.Moments.push(moment);
 	}
