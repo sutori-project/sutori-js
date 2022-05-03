@@ -3,12 +3,14 @@
  */
 class VnsMoment {
 	Elements: Array<VnsElement>;
+	Attributes: Object;
 	ID: string;
 	Goto: string;
 
 	
 	constructor() {
 		this.Elements = new Array<VnsElement>();
+		this.Attributes = new Object;
 		this.ID = '';
 		this.Goto = '';
 	}

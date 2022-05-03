@@ -14,6 +14,7 @@ class VnsElementImage extends VnsElement {
 	static Parse(element: HTMLElement) {
 		const result = new VnsElementImage();
 		result.Src = element.textContent;
+		result.ParseExtraAttributes(element, ['lang']);
 
 		if (element.hasAttribute('lang')) {
 			const lang = element.attributes['lang'].textContent;

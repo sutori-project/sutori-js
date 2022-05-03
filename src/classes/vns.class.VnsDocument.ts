@@ -19,7 +19,7 @@ class VnsDocument {
 		// create a new document.
 		const result = new VnsDocument();
 		// load the document here.
-		result.AddMomentsFromXmlUri(uri);
+		await result.AddMomentsFromXmlUri(uri);
 		// return the loaded document.
 		return result;
 	}
@@ -40,7 +40,7 @@ class VnsDocument {
 	 * Append moments from a raw XML string.
 	 * @param raw_xml The raw XML string to parse.
 	 */
-	async AddMomentsFromXml(raw_xml: string) {
+	AddMomentsFromXml(raw_xml: string) {
 		const xml_parser = new DOMParser();
 		const xml = xml_parser.parseFromString(raw_xml, "text/xml");
 		const self = this;
@@ -55,6 +55,8 @@ class VnsDocument {
 			if (moment_e.hasAttribute('goto')) {
 				moment.Goto = moment_e.attributes['goto'].textContent;
 			}
+
+			self.AddMomentAttributes(moment, moment_e, ['id', 'goto']);
 
 			moment_e.querySelectorAll('elements > *').forEach((element_e: HTMLElement) => {
 				switch (element_e.tagName) {
@@ -79,6 +81,21 @@ class VnsDocument {
 		});
 	}
 
+
+	/**
+	 * Called by AddMomentsFromXml to add extra attributes when reading moments.
+	 * @param moment The target moment to manipulate.
+	 * @param element The source element.
+	 * @param exclude An array of keys to exclude.
+	 */
+	private AddMomentAttributes(moment: VnsMoment, element: HTMLElement, exclude?: Array<string>) {
+		const self = this;
+		for (let i=0; i<element.attributes.length; i++) {
+			 const attr = element.attributes[i];
+			 if (typeof exclude !== 'undefined' && exclude.indexOf(attr.name) > -1) continue;
+			 moment.Attributes[attr.name] = attr.value;
+		}
+  }
 
 	/**
 	 * Add a moment instance to this document.

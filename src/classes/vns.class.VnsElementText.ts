@@ -14,6 +14,7 @@ class VnsElementText extends VnsElement {
 	static Parse(element: HTMLElement) {
 		const result = new VnsElementText();
 		result.Text = element.textContent;
+		result.ParseExtraAttributes(element, ['lang']);
 
 		if (element.hasAttribute('lang')) {
 			const lang = element.attributes['lang'].textContent;

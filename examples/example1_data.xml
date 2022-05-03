@@ -5,14 +5,24 @@
 			tips:
 			- You can have as many moments as you want.
 			- The id attribute gives a moment an identifier.
-			- goto and option target are used to identify the next moment.
+			- Goto and option target are used to identify the next moment.
+			- Primary attributes for moments are id and goto.
+			- Any other attribute is stored in the Attributes property.
+			- A moment element must always have an elements child element.
 		-->
 		<moment>
 			<elements>
-				<text>Hi there!</text>
+				<!--
+					tips:
+					- The lang attribute is used to specify culture.
+					- Primary attributes for elements are lang, target.
+					- Option elements also require solver and solver_callback.
+					- Any other attribute is stored in the Attributes property.
+				-->
+				<text data_example="test">Hi there!</text>
 			</elements>
 		</moment>
-		<moment>
+		<moment data_example="another test">
 			<elements>
 				<text>This is a demonstration showing how vns-js works!</text>
 			</elements>

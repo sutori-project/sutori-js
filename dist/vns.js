@@ -76,7 +76,7 @@ class VnsDocument {
         // create a new document.
         const result = new VnsDocument();
         // load the document here.
-        result.AddMomentsFromXmlUri(uri);
+        await result.AddMomentsFromXmlUri(uri);
         // return the loaded document.
         return result;
     }
@@ -93,7 +93,7 @@ class VnsDocument {
      * Append moments from a raw XML string.
      * @param raw_xml The raw XML string to parse.
      */
-    async AddMomentsFromXml(raw_xml) {
+    AddMomentsFromXml(raw_xml) {
         const xml_parser = new DOMParser();
         const xml = xml_parser.parseFromString(raw_xml, "text/xml");
         const self = this;
@@ -105,6 +105,7 @@ class VnsDocument {
             if (moment_e.hasAttribute('goto')) {
                 moment.Goto = moment_e.attributes['goto'].textContent;
             }
+            self.AddMomentAttributes(moment, moment_e, ['id', 'goto']);
             moment_e.querySelectorAll('elements > *').forEach((element_e) => {
                 switch (element_e.tagName) {
                     case 'text':
@@ -127,6 +128,21 @@ class VnsDocument {
         });
     }
     /**
+     * Called by AddMomentsFromXml to add extra attributes when reading moments.
+     * @param moment The target moment to manipulate.
+     * @param element The source element.
+     * @param exclude An array of keys to exclude.
+     */
+    AddMomentAttributes(moment, element, exclude) {
+        const self = this;
+        for (let i = 0; i < element.attributes.length; i++) {
+            const attr = element.attributes[i];
+            if (typeof exclude !== 'undefined' && exclude.indexOf(attr.name) > -1)
+                continue;
+            moment.Attributes[attr.name] = attr.value;
+        }
+    }
+    /**
      * Add a moment instance to this document.
      * @param moment The moment instance.
      */
@@ -138,6 +154,21 @@ class VnsDocument {
  * The base class for all moment elements.
  */
 class VnsElement {
+    /**
+     * Parse extra attributes when parsing an element.
+     * @param element The source element.
+     * @param exclude An array of keys to exclude.
+     */
+    ParseExtraAttributes(element, exclude) {
+        const self = this;
+        self.Attributes = new Object;
+        for (let i = 0; i < element.attributes.length; i++) {
+            const attr = element.attributes[i];
+            if (typeof exclude !== 'undefined' && exclude.indexOf(attr.name) > -1)
+                continue;
+            self.Attributes[attr.name] = attr.value;
+        }
+    }
 }
 /**
  * Describes an audio moment element.
@@ -150,6 +181,7 @@ class VnsElementAudio extends VnsElement {
     static Parse(element) {
         const result = new VnsElementAudio();
         result.Src = element.textContent;
+        result.ParseExtraAttributes(element, ['lang']);
         if (element.hasAttribute('lang')) {
             const lang = element.attributes['lang'].textContent;
             result.ContentCulture = VnsTools.ParseCulture(lang);
@@ -168,6 +200,7 @@ class VnsElementImage extends VnsElement {
     static Parse(element) {
         const result = new VnsElementImage();
         result.Src = element.textContent;
+        result.ParseExtraAttributes(element, ['lang']);
         if (element.hasAttribute('lang')) {
             const lang = element.attributes['lang'].textContent;
             result.ContentCulture = VnsTools.ParseCulture(lang);
@@ -189,6 +222,7 @@ class VnsElementOption extends VnsElement {
     static Parse(element) {
         const result = new VnsElementOption();
         result.Text = element.textContent;
+        result.ParseExtraAttributes(element, ['lang', 'target', 'solver', 'solver_callback']);
         if (element.hasAttribute('lang')) {
             const lang = element.attributes['lang'].textContent;
             result.ContentCulture = VnsTools.ParseCulture(lang);
@@ -217,6 +251,7 @@ class VnsElementText extends VnsElement {
     static Parse(element) {
         const result = new VnsElementText();
         result.Text = element.textContent;
+        result.ParseExtraAttributes(element, ['lang']);
         if (element.hasAttribute('lang')) {
             const lang = element.attributes['lang'].textContent;
             result.ContentCulture = VnsTools.ParseCulture(lang);
@@ -235,6 +270,7 @@ class VnsElementVideo extends VnsElement {
     static Parse(element) {
         const result = new VnsElementVideo();
         result.Src = element.textContent;
+        result.ParseExtraAttributes(element, ['lang']);
         if (element.hasAttribute('lang')) {
             const lang = element.attributes['lang'].textContent;
             result.ContentCulture = VnsTools.ParseCulture(lang);
@@ -304,6 +340,7 @@ class VnsEngine {
 class VnsMoment {
     constructor() {
         this.Elements = new Array();
+        this.Attributes = new Object;
         this.ID = '';
         this.Goto = '';
     }

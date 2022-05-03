@@ -14,6 +14,7 @@ class VnsElementAudio extends VnsElement {
 	static Parse(element: HTMLElement) {
 		const result = new VnsElementAudio();
 		result.Src = element.textContent;
+		result.ParseExtraAttributes(element, ['lang']);
 
 		if (element.hasAttribute('lang')) {
 			const lang = element.attributes['lang'].textContent;
