@@ -23,7 +23,7 @@ includes pre-compiled and minified JavaScript to make things easier. So you can
 just copy [dist/vns.min.js](https://raw.githubusercontent.com/kodaloid/vns-js/main/dist/vns.min.js) (right-click and save link as...) into your project folder, then reference it with a
 script tag like so:
 
-```
+```html
 <script src="vns-js.min.js"></script>
 ```
 
@@ -33,7 +33,7 @@ script tag like so:
 
 Here's a bare bones example of how to setup a VNS project: 
 
-```
+```js
 // load in an xml document.
 const doc = await VnsDocument.LoadXml("example1_data.xml");
         
@@ -42,8 +42,8 @@ const engine = new VnsEngine(doc);
 
 // handle what happens when the server challenges for a response.
 engine.HandleChallenge = function(event) {
-	// handler code goes here.
-	console.log(event);
+   // handler code goes here.
+   console.log(event);
 }
 
 // ask the engine to start prompting for responses.
@@ -60,13 +60,13 @@ A moment can also have options. Each option can have multimedia assigned too
 You decide if an option has been chosen, then you respond to the engine either
 by conveying the chosen target like this:
 
-```
+```js
 engine.GotoMomentID(option.Target);
 ```
 
 or by moving the cursor forward like this:
 
-```
+```js
 engine.GotoNextMoment();
 ```
 
@@ -78,7 +78,7 @@ found at [examples/example1_data.xml](https://raw.githubusercontent.com/kodaloid
 
 You can also create a document from pure JavaScript like this:
 
-```
+```js
 const extraMoment = new VnsMoment();
 extraMoment.AddText(culture, "This is a bonus moment!");
 doc.AddMoment(extraMoment);
