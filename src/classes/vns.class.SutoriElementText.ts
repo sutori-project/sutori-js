@@ -1,24 +1,24 @@
 /**
  * Describes a text moment element.
  */
-class VnsElementText extends VnsElement {
+class SutoriElementText extends SutoriElement {
 	Text: string;
 
 
 	constructor() {
 		super();
-		this.ContentCulture = VnsCulture.None;
+		this.ContentCulture = SutoriCulture.None;
 	}
 
 
 	static Parse(element: HTMLElement) {
-		const result = new VnsElementText();
+		const result = new SutoriElementText();
 		result.Text = element.textContent;
 		result.ParseExtraAttributes(element, ['lang']);
 
 		if (element.hasAttribute('lang')) {
 			const lang = element.attributes['lang'].textContent;
-			result.ContentCulture = VnsTools.ParseCulture(lang);
+			result.ContentCulture = SutoriTools.ParseCulture(lang);
 		}
 
 		return result;

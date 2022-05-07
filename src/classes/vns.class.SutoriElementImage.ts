@@ -1,26 +1,26 @@
 /**
- * Describes an audio moment element.
+ * Describes an image moment element.
  */
-class VnsElementAudio extends VnsElement {
+class SutoriElementImage extends SutoriElement {
 	Src: string;
 
 
 	constructor() {
 		super();
-		this.ContentCulture = VnsCulture.None;
+		this.ContentCulture = SutoriCulture.None;
 	}
 
 
 	static Parse(element: HTMLElement) {
-		const result = new VnsElementAudio();
+		const result = new SutoriElementImage();
 		result.Src = element.textContent;
 		result.ParseExtraAttributes(element, ['lang']);
 
 		if (element.hasAttribute('lang')) {
 			const lang = element.attributes['lang'].textContent;
-			result.ContentCulture = VnsTools.ParseCulture(lang);
+			result.ContentCulture = SutoriTools.ParseCulture(lang);
 		}
-		
+
 		return result;
 	}
 }

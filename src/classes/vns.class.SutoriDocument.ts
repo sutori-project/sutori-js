@@ -1,23 +1,23 @@
 /**
  * Describes a document of multimedia moments.
  */
-class VnsDocument {
-	Moments: Array<VnsMoment>;
+class SutoriDocument {
+	Moments: Array<SutoriMoment>;
 
 	
 	constructor() {
-		this.Moments = new Array<VnsMoment>();
+		this.Moments = new Array<SutoriMoment>();
 	}
 
 
 	/**
-	 * Load a VnsDocument from an XML file.
+	 * Load a SutoriDocument from an XML file.
 	 * @param uri The uri location of the XML file to load.
 	 * @returns The loaded document.
 	 */
 	static async LoadXml(uri: string) {
 		// create a new document.
-		const result = new VnsDocument();
+		const result = new SutoriDocument();
 		// load the document here.
 		await result.AddMomentsFromXmlUri(uri);
 		// return the loaded document.
@@ -46,7 +46,7 @@ class VnsDocument {
 		const self = this;
 
 		xml.querySelectorAll('moments moment').forEach((moment_e: HTMLElement) => {
-			const moment = new VnsMoment();
+			const moment = new SutoriMoment();
 
 			if (moment_e.hasAttribute('id')) {
 				moment.ID = moment_e.attributes['id'].textContent;
@@ -61,19 +61,19 @@ class VnsDocument {
 			moment_e.querySelectorAll('elements > *').forEach((element_e: HTMLElement) => {
 				switch (element_e.tagName) {
 					case 'text':
-						moment.Elements.push(VnsElementText.Parse(element_e));
+						moment.Elements.push(SutoriElementText.Parse(element_e));
 						break;
 					case 'option':
-						moment.Elements.push(VnsElementOption.Parse(element_e));
+						moment.Elements.push(SutoriElementOption.Parse(element_e));
 						break;
 					case 'image':
-						moment.Elements.push(VnsElementImage.Parse(element_e));
+						moment.Elements.push(SutoriElementImage.Parse(element_e));
 						break;
 					case 'audio':
-						moment.Elements.push(VnsElementAudio.Parse(element_e));
+						moment.Elements.push(SutoriElementAudio.Parse(element_e));
 						break;
 					case 'video':
-						moment.Elements.push(VnsElementVideo.Parse(element_e));
+						moment.Elements.push(SutoriElementVideo.Parse(element_e));
 				}
 			});
 
@@ -88,7 +88,7 @@ class VnsDocument {
 	 * @param element The source element.
 	 * @param exclude An array of keys to exclude.
 	 */
-	private AddMomentAttributes(moment: VnsMoment, element: HTMLElement, exclude?: Array<string>) {
+	private AddMomentAttributes(moment: SutoriMoment, element: HTMLElement, exclude?: Array<string>) {
 		const self = this;
 		for (let i=0; i<element.attributes.length; i++) {
 			 const attr = element.attributes[i];
@@ -101,7 +101,7 @@ class VnsDocument {
 	 * Add a moment instance to this document.
 	 * @param moment The moment instance.
 	 */
-	AddMoment(moment: VnsMoment) {
+	AddMoment(moment: SutoriMoment) {
 		this.Moments.push(moment);
 	}
 }

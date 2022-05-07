@@ -24,7 +24,7 @@
 		</moment>
 		<moment data_example="another test">
 			<elements>
-				<text>This is a demonstration showing how vns-js works!</text>
+				<text>This is a demonstration showing how sutori-js works!</text>
 			</elements>
 		</moment>
 		<moment id="test">

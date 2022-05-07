@@ -1,30 +1,30 @@
 /**
  * Describes an option moment element.
  */
-class VnsElementOption extends VnsElement {
+class SutoriElementOption extends SutoriElement {
 	Text: string;
 	Target: string;
-	Solver: VnsSolver;
+	Solver: SutoriSolver;
 	SolverCallback: string;
 
 
 	constructor() {
 		super();
-		this.ContentCulture = VnsCulture.None;
+		this.ContentCulture = SutoriCulture.None;
 		this.Target = null;
-		this.Solver = VnsSolver.None;
+		this.Solver = SutoriSolver.None;
 		this.SolverCallback = null;
 	}
 
     
 	static Parse(element: HTMLElement) {
-		const result = new VnsElementOption();
+		const result = new SutoriElementOption();
 		result.Text = element.textContent;
 		result.ParseExtraAttributes(element, ['lang', 'target', 'solver', 'solver_callback']);
 
 		if (element.hasAttribute('lang')) {
 			const lang = element.attributes['lang'].textContent;
-			result.ContentCulture = VnsTools.ParseCulture(lang);
+			result.ContentCulture = SutoriTools.ParseCulture(lang);
 		}
 
 		if (element.hasAttribute('target')) {
@@ -33,7 +33,7 @@ class VnsElementOption extends VnsElement {
 
 		if (element.hasAttribute('solver')) {
 			const solver = element.attributes['solver'].textContent;
-			result.Solver = VnsTools.ParseSolver(solver);
+			result.Solver = SutoriTools.ParseSolver(solver);
 		}
 
 		if (element.hasAttribute('solver_callback')) {

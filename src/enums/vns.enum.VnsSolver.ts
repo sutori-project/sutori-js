@@ -1,4 +1,4 @@
-enum VnsSolver {
+enum SutoriSolver {
 	/** use this when no solver is required */
 	None = 'none',
 

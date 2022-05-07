@@ -1,17 +1,17 @@
 {
-	"name": "vns-js",
+	"name": "sutori-js",
 	"version": "0.0.1",
-	"homepage": "https://github.com/kodaloid/vns-js",
+	"homepage": "https://github.com/kodaloid/sutori-js",
 	"author": {
 		"name": "Steve Bailey (kodaloid)",
 		"email": "steve@kodaloid.com",
 		"url": "https://kodaloid.com"
 	},
 	"description": "A Challenge Response Sequencer for building interlinking chains of multimedia.",
-	"main": "dist/vns-js.min.js",
+	"main": "dist/sutori-js.min.js",
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/kodaloid/vns-js.git"
+		"url": "git+https://github.com/kodaloid/sutori-js.git"
 	},
 	"license": "MIT",
 	"keywords": [
@@ -20,10 +20,10 @@
 		"framework"
 	],
 	"bugs": {
-		"url": "https://github.com/kodaloid/vns-js/issues"
+		"url": "https://github.com/kodaloid/sutori-js/issues"
 	},
 	"scripts": {
-		"build": "tsc -p . && jsmin -o dist/vns.min.js dist/vns.js"
+		"build": "tsc -p . && jsmin -o dist/sutori.min.js dist/sutori.js"
 	},
    "files": [
 		"src",

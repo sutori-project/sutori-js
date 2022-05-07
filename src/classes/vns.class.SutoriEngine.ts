@@ -1,13 +1,13 @@
 /**
  * A prompt engine for VNS.
  */
-class VnsEngine {
-	private Cursor: VnsMoment;
-	private Document: VnsDocument;
+class SutoriEngine {
+	private Cursor: SutoriMoment;
+	private Document: SutoriDocument;
 	public HandleChallenge: CallableFunction;
 
 	
-	constructor(document: VnsDocument) {
+	constructor(document: SutoriDocument) {
 		this.Document = document;
 	}
 
@@ -27,11 +27,11 @@ class VnsEngine {
 	 * Goto a specific moment found in the Document by instance.
 	 * @param moment The instance of the moment to move the cursor to.
 	 */
-	private GotoMoment(moment: VnsMoment) {
+	private GotoMoment(moment: SutoriMoment) {
 		if (moment == null) moment = this.Document.Moments[0];
 		if (moment == null) throw new Error("Document does not have any beads!");
 		this.Cursor = moment;
-		this.HandleChallenge(new VnsChallengeEvent(this, moment));
+		this.HandleChallenge(new SutoriChallengeEvent(this, moment));
 	}
 
 

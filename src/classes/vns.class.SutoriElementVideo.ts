@@ -1,24 +1,24 @@
 /**
  * Describes a video moment element.
  */
-class VnsElementVideo extends VnsElement {
+class SutoriElementVideo extends SutoriElement {
 	Src: string;
 
 
 	constructor() {
 		super();
-		this.ContentCulture = VnsCulture.None;
+		this.ContentCulture = SutoriCulture.None;
 	}
 
 
 	static Parse(element: HTMLElement) {
-		const result = new VnsElementVideo();
+		const result = new SutoriElementVideo();
 		result.Src = element.textContent;
 		result.ParseExtraAttributes(element, ['lang']);
 
 		if (element.hasAttribute('lang')) {
 			const lang = element.attributes['lang'].textContent;
-			result.ContentCulture = VnsTools.ParseCulture(lang);
+			result.ContentCulture = SutoriTools.ParseCulture(lang);
 		}
 	
 		return result;

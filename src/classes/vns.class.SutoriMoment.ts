@@ -1,15 +1,15 @@
 /**
  * 
  */
-class VnsMoment {
-	Elements: Array<VnsElement>;
+class SutoriMoment {
+	Elements: Array<SutoriElement>;
 	Attributes: Object;
 	ID: string;
 	Goto: string;
 
 	
 	constructor() {
-		this.Elements = new Array<VnsElement>();
+		this.Elements = new Array<SutoriElement>();
 		this.Attributes = new Object;
 		this.ID = '';
 		this.Goto = '';
@@ -22,8 +22,8 @@ class VnsMoment {
 	 * @param text The associated text.
 	 * @returns The added element.
 	 */
-	AddText(culture: VnsCulture, text: string) : VnsElementText {
-		const element = new VnsElementText();
+	AddText(culture: SutoriCulture, text: string) : SutoriElementText {
+		const element = new SutoriElementText();
 		element.ContentCulture = culture;
 		element.Text = text; 
 		this.Elements.push(element);
@@ -37,8 +37,8 @@ class VnsMoment {
 	 * @param src The associated file src.
 	 * @returns The added element.
 	 */
-	AddImage(culture: VnsCulture, src: string) : VnsElementImage {
-		const element = new VnsElementImage();
+	AddImage(culture: SutoriCulture, src: string) : SutoriElementImage {
+		const element = new SutoriElementImage();
 		element.ContentCulture = culture;
 		element.Src = src; 
 		this.Elements.push(element);
@@ -52,8 +52,8 @@ class VnsMoment {
 	 * @param src The associated file src.
 	 * @returns The added element.
 	 */
-	AddAudio(culture: VnsCulture, src: string) : VnsElementAudio {
-		const element = new VnsElementAudio();
+	AddAudio(culture: SutoriCulture, src: string) : SutoriElementAudio {
+		const element = new SutoriElementAudio();
 		element.ContentCulture = culture;
 		element.Src = src; 
 		this.Elements.push(element);
@@ -67,8 +67,8 @@ class VnsMoment {
 	 * @param src The associated file src.
 	 * @returns The added element.
 	 */
-	AddVideo(culture: VnsCulture, src: string) : VnsElementVideo {
-		const element = new VnsElementVideo();
+	AddVideo(culture: SutoriCulture, src: string) : SutoriElementVideo {
+		const element = new SutoriElementVideo();
 		element.ContentCulture = culture;
 		element.Src = src; 
 		this.Elements.push(element);
@@ -83,8 +83,8 @@ class VnsMoment {
 	 * @param text The id of the moment to target when this option is selected.
 	 * @returns The added element.
 	 */
-	AddOption(culture: VnsCulture, text: string, target: string) : VnsElementOption {
-		const element = new VnsElementOption();
+	AddOption(culture: SutoriCulture, text: string, target: string) : SutoriElementOption {
+		const element = new SutoriElementOption();
 		element.ContentCulture = culture;
 		element.Text = text;
 		element.Target = target; 

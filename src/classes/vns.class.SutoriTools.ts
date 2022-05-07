@@ -1,16 +1,16 @@
 /**
  * 
  */
-class VnsTools {
+class SutoriTools {
 	/**
 	 * Convert the text value of a culture into the enum key equivalent. For
 	 * example 'en-GB' becomes VnCulture.enGB
 	 * @param cultureName 
 	 */
-	static ParseCulture(cultureName: string) : VnsCulture {
-		const stringKey = Object.entries(VnsCulture)
+	static ParseCulture(cultureName: string) : SutoriCulture {
+		const stringKey = Object.entries(SutoriCulture)
 								.find(([key, val]) => val === cultureName)?.[0];
-		return VnsCulture[stringKey];
+		return SutoriCulture[stringKey];
 	}
 	
 
@@ -19,9 +19,9 @@ class VnsTools {
 	 * example 'option_index' becomes VnSolver.OptionIndex
 	 * @param solverName 
 	 */
-	static ParseSolver(solverName: string) : VnsSolver {
-		const stringKey = Object.entries(VnsSolver)
+	static ParseSolver(solverName: string) : SutoriSolver {
+		const stringKey = Object.entries(SutoriSolver)
 								.find(([key, val]) => val === solverName)?.[0];
-		return VnsSolver[stringKey];
+		return SutoriSolver[stringKey];
 	}
 }

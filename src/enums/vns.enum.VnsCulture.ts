@@ -1,4 +1,4 @@
-enum VnsCulture {
+enum SutoriCulture {
 	None = 'none',
 	All = 'all',
 	EnUS = 'en-US', /* English (United States) */

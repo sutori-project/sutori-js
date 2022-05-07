@@ -1,9 +1,9 @@
 /**
  * The base class for all moment elements.
  */
-class VnsElement {
+class SutoriElement {
     Attributes: Object;
-    ContentCulture: VnsCulture;
+    ContentCulture: SutoriCulture;
 
     
     /**

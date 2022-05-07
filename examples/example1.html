@@ -5,7 +5,7 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta name="description" content="A Challenge Response Sequencer for building interlinking chains of multimedia.">
-	<title>vns-js - Example 1</title>
+	<title>sutori-js - Example 1</title>
 </head>
 <body>
 
@@ -13,22 +13,22 @@
 	<hr />
 	<p>Refresh (F5) page to start again.</p>
     
-	<script src="../dist/vns.min.js"></script>
+	<script src="../dist/sutori.min.js"></script>
 	<script>
 		document.addEventListener("DOMContentLoaded", async function() {
 			
 			// load in a document.
-			const doc = await VnsDocument.LoadXml("example1_data.xml");
+			const doc = await SutoriDocument.LoadXml("example1_data.xml");
 			
 			// create a server engine.
-			const engine = window.vns = new VnsEngine(doc);
+			const engine = window.sutori = new SutoriEngine(doc);
 			
 			// record which culture we wish to use when displaying multimedia. 
-			const culture = VnsCulture.None;
+			const culture = SutoriCulture.None;
 
 
 			// example of how to add another moment in code.
-			const extraMoment = new VnsMoment();
+			const extraMoment = new SutoriMoment();
 			extraMoment.AddText(culture, "This is a bonus moment!");
 			doc.AddMoment(extraMoment);
 
