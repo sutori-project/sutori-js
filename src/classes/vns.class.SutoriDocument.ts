@@ -32,7 +32,8 @@ class SutoriDocument {
 	async AddMomentsFromXmlUri(uri: string) {
 		const response = await fetch(uri);
 		const raw_xml = await response.text();
-		await this.AddMomentsFromXml(raw_xml);
+		console.log("loading moments from " + uri);
+		this.AddMomentsFromXml(raw_xml);
 	}
 
 
@@ -58,7 +59,7 @@ class SutoriDocument {
 
 			self.AddMomentAttributes(moment, moment_e, ['id', 'goto']);
 
-			moment_e.querySelectorAll('elements > *').forEach((element_e: HTMLElement) => {
+			moment_e.querySelectorAll('elements > *').forEach(async (element_e: HTMLElement) => {
 				switch (element_e.tagName) {
 					case 'text':
 						moment.Elements.push(SutoriElementText.Parse(element_e));
@@ -74,6 +75,16 @@ class SutoriDocument {
 						break;
 					case 'video':
 						moment.Elements.push(SutoriElementVideo.Parse(element_e));
+						break;
+					case 'load':
+						// execute any load elements set to immediate or '''.
+						const loader = SutoriElementLoad.Parse(element_e);
+						if (loader.LoadMode == SutoriLoadMode.Immediate) {
+							await self.AddMomentsFromXmlUri(loader.Path);
+							loader.Loaded = true;
+						}
+						moment.Elements.push(loader);
+						break;
 				}
 			});
 

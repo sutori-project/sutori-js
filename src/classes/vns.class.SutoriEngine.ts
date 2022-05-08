@@ -16,7 +16,7 @@ class SutoriEngine {
 	 * Goto a specific moment found in the Document by id.
 	 * @param momentID The id of the moment to move the cursor to.
 	 */
-	GotoMomentID(momentID : string) {
+	async GotoMomentID(momentID : string) {
 		const moment = this.Document.Moments.find(t => t.ID == momentID);
 		if (moment == null) throw new Error("Could not find moment with id #{momentID}.");
 		this.GotoMoment(moment);
@@ -27,10 +27,22 @@ class SutoriEngine {
 	 * Goto a specific moment found in the Document by instance.
 	 * @param moment The instance of the moment to move the cursor to.
 	 */
-	private GotoMoment(moment: SutoriMoment) {
+	private async GotoMoment(moment: SutoriMoment) {
+		const self = this;
+
 		if (moment == null) moment = this.Document.Moments[0];
 		if (moment == null) throw new Error("Document does not have any beads!");
 		this.Cursor = moment;
+
+		// execute any load elements set to encounter.
+		const loaderElements = moment.GetLoaderElements(SutoriLoadMode.OnEncounter);
+		if (loaderElements && loaderElements.length > 0) {
+			for (let i=0; i<loaderElements.length; i++) {
+				await self.Document.AddMomentsFromXmlUri(loaderElements[i].Path);
+				loaderElements[i].Loaded = true;
+			}
+		}
+
 		this.HandleChallenge(new SutoriChallengeEvent(this, moment));
 	}
 
