@@ -26,12 +26,10 @@
 			// record which culture we wish to use when displaying multimedia. 
 			const culture = SutoriCulture.None;
 
-
 			// example of how to add another moment in code.
 			// const extraMoment = new SutoriMoment();
 			// extraMoment.AddText(culture, "This is a bonus moment!");
 			// doc.AddMoment(extraMoment);
-
 			
 			// handle what happens when the server challenges for a response.
 			engine.HandleChallenge = function(event) {
@@ -47,9 +45,15 @@
 
 				// add text.
 				event.GetText(culture).forEach(textElement => {
+					const actor = textElement.GetAssociatedActor(doc);
 					const p = document.createElement('p');
-					p.textContent = textElement.Text;
-					dialog.appendChild(p); 
+					if (actor) {
+						p.textContent = actor.Name + ": " + textElement.Text;
+					}
+					else {
+						p.textContent = textElement.Text;
+					}
+					dialog.appendChild(p);
 				});
 
 				// add options.

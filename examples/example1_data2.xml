@@ -1,34 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <document xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
 	<moments>
+		
 		<moment id="door1" goto="end">
-			<elements>
-				<image lang="all">images/door1.png</image>
-				<!-- <audio>door1.mp3</audio> -->
-				<text>You picked Door 1!</text>
-				<text tag="" lang="fr-FR">Tu as choisi la porte 1!</text>
-			</elements>
+			<image lang="all">images/door1.png</image>
+			<!-- <audio>door1.mp3</audio> -->
+			<text>You picked Door 1!</text>
+			<text tag="" lang="fr-FR">Tu as choisi la porte 1!</text>
 		</moment>
+		
 		<moment id="door2" goto="end">
-			<elements>
-				<image lang="all">images/door2.png</image>
-				<!-- <video>door2.mp4</video> -->
-				<text>You picked Door 2!</text>
-				<text lang="fr-FR">Tu as choisi la porte 2!</text>
-			</elements>
+			<image lang="all">images/door2.png</image>
+			<!-- <video>door2.mp4</video> -->
+			<text>You picked Door 2!</text>
+			<text lang="fr-FR">Tu as choisi la porte 2!</text>
 		</moment>
+
 		<moment id="door3" goto="end">
-			<elements>
-				<image lang="all">images/door3.png</image>
-				<!-- <audio>door3.mp3</audio> -->
-				<text tag="">You picked Door 3!</text>
-				<text lang="fr-FR">Tu as choisi la porte 3!</text>
-			</elements>
+			<image lang="all">images/door3.png</image>
+			<!-- <audio>door3.mp3</audio> -->
+			<text tag="">You picked Door 3!</text>
+			<text lang="fr-FR">Tu as choisi la porte 3!</text>
 		</moment>
+
 		<moment id="end">
-			<elements>
-				<text>This is the end.</text>
-			</elements>
+			<text>This is the end.</text>
 		</moment>
+		
 	</moments>
 </document>

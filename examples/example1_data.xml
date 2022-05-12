@@ -1,16 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <document xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
 	<actors>
-		<actor id="player">
-			<name>The Player</name>
-			<resources>
-				<file type="avatar" lang="all" tag="">images/player.png</file>
-			</resources>
+		<!--
+			tips on actors:
+			- You can have as many actors as you want.
+			- Every actor needs a unique id and a name.
+			- Allows elements such as images, videos etc...
+		-->
+		<actor id="player" name="The Player">
+			<image purpose="avatar">images/player.png</image>
 		</actor>
 	</actors>
 	<moments>
 		<!--
-			tips:
+			tips on moments:
 			- You can have as many moments as you want.
 			- The id attribute gives a moment an identifier.
 			- Goto and option target are used to identify the next moment.
@@ -19,35 +22,31 @@
 			- A moment element must always have an elements child element.
 		-->
 		<moment>
-			<elements>
-				<!--
-					tips:
-					- The lang attribute is used to specify culture.
-					- Primary attributes for elements are lang, target.
-					- Option elements also require solver and solver_callback.
-					- Any other attribute is stored in the Attributes property.
-				-->
-				<text data_example="test">Hi there!</text>
-			</elements>
+			<!--
+				tips:
+				- The lang attribute is used to specify culture.
+				- Primary attributes for elements are lang, target.
+				- Option elements also require solver and solver_callback.
+				- Any other attribute is stored in the Attributes property.
+			-->
+			<text data-example="test">Hi there!</text>
 		</moment>
-		<moment data_example="another test">
-			<elements>
-				<text>This is a demonstration showing how sutori-js works!</text>
-			</elements>
+
+		<moment data-example="another test">
+			<text>This is a demonstration showing how sutori-js works!</text>
 		</moment>
+
 		<moment id="test">
-			<elements>
-				<text actor="player">Which door do you want to open?</text>
-				<option target="door1">Door 1</option>
-				<option target="door2">Door 2</option>
-				<option target="door3">Door 3</option>
-				<text lang="fr-FR">Quelle porte voulez-vous ouvrir?</text>
-				<option lang="fr-FR" target="door1">Porte 1</option>
-				<option lang="fr-FR" target="door2">Porte 2</option>
-				<option lang="fr-FR" target="door3">Porte 3</option>
-				<!-- load element loads further moments when encountered -->
-				<load mode="encounter">example1_data2.xml</load>
-			</elements>
+			<text actor="player">Which door do you want to open?</text>
+			<option target="door1">Door 1</option>
+			<option target="door2">Door 2</option>
+			<option target="door3">Door 3</option>
+			<text lang="fr-FR">Quelle porte voulez-vous ouvrir?</text>
+			<option lang="fr-FR" target="door1">Porte 1</option>
+			<option lang="fr-FR" target="door2">Porte 2</option>
+			<option lang="fr-FR" target="door3">Porte 3</option>
+			<!-- load element loads further moments when encountered -->
+			<load mode="encounter">example1_data2.xml</load>
 		</moment>
 	</moments>
 </document>

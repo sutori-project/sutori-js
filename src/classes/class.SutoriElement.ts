@@ -1,7 +1,7 @@
 /**
  * The base class for all moment elements.
  */
-class SutoriElement {
+abstract class SutoriElement {
     Attributes: Object;
     ContentCulture: SutoriCulture;
 

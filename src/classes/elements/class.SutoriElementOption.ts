@@ -2,10 +2,25 @@
  * Describes an option moment element.
  */
 class SutoriElementOption extends SutoriElement {
+	/**
+	 * The textual content of this option.
+	 */
 	Text: string;
-	Target: string;
+
+	/**
+	 * The moment id target destination.
+	 */
+	Target?: string;
+
+	/**
+	 * The logical method to use to determine weather this option has been chosen.
+	 */
 	Solver: SutoriSolver;
-	SolverCallback: string;
+
+	/**
+	 * If a Custom solver is chosen, specify a callback to handle the solving.
+	 */
+	SolverCallback?: string;
 
 
 	constructor() {

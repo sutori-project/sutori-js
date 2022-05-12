@@ -1,18 +1,18 @@
 /**
- * 
+ * Describes a moment in time.
  */
 class SutoriMoment {
-	Elements: Array<SutoriElement>;
 	Attributes: Object;
-	ID: string;
+	Elements: Array<SutoriElement>;
 	Goto: string;
+	ID: string;
 
 	
 	constructor() {
-		this.Elements = new Array<SutoriElement>();
 		this.Attributes = new Object;
-		this.ID = '';
+		this.Elements = new Array<SutoriElement>();
 		this.Goto = '';
+		this.ID = '';
 	}
 
 

@@ -1,5 +1,5 @@
 /**
- * 
+ * Various helper tools.
  */
 class SutoriTools {
 	/**

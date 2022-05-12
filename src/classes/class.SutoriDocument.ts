@@ -2,10 +2,12 @@
  * Describes a document of multimedia moments.
  */
 class SutoriDocument {
+	Actors: Array<SutoriActor>;
 	Moments: Array<SutoriMoment>;
 
 	
 	constructor() {
+		this.Actors = new Array<SutoriActor>();
 		this.Moments = new Array<SutoriMoment>();
 	}
 
@@ -19,7 +21,7 @@ class SutoriDocument {
 		// create a new document.
 		const result = new SutoriDocument();
 		// load the document here.
-		await result.AddMomentsFromXmlUri(uri);
+		await result.AddDataFromXmlUri(uri);
 		// return the loaded document.
 		return result;
 	}
@@ -29,11 +31,11 @@ class SutoriDocument {
 	 * Append moments from an XML file.
 	 * @param uri The uri location of the XML file to load.
 	 */
-	async AddMomentsFromXmlUri(uri: string) {
+	async AddDataFromXmlUri(uri: string) {
 		const response = await fetch(uri);
 		const raw_xml = await response.text();
 		console.log("loading moments from " + uri);
-		this.AddMomentsFromXml(raw_xml);
+		this.AddDataFromXml(raw_xml);
 	}
 
 
@@ -41,10 +43,14 @@ class SutoriDocument {
 	 * Append moments from a raw XML string.
 	 * @param raw_xml The raw XML string to parse.
 	 */
-	AddMomentsFromXml(raw_xml: string) {
+	AddDataFromXml(raw_xml: string) {
 		const xml_parser = new DOMParser();
 		const xml = xml_parser.parseFromString(raw_xml, "text/xml");
 		const self = this;
+
+		xml.querySelectorAll('actors actor').forEach((actor_e: HTMLElement) => {
+			self.Actors.push(SutoriActor.Parse(actor_e));
+		});
 
 		xml.querySelectorAll('moments moment').forEach((moment_e: HTMLElement) => {
 			const moment = new SutoriMoment();
@@ -59,7 +65,7 @@ class SutoriDocument {
 
 			self.AddMomentAttributes(moment, moment_e, ['id', 'goto']);
 
-			moment_e.querySelectorAll('elements > *').forEach(async (element_e: HTMLElement) => {
+			moment_e.querySelectorAll(':scope > *').forEach(async (element_e: HTMLElement) => {
 				switch (element_e.tagName) {
 					case 'text':
 						moment.Elements.push(SutoriElementText.Parse(element_e));
@@ -80,7 +86,7 @@ class SutoriDocument {
 						// execute any load elements set to immediate or '''.
 						const loader = SutoriElementLoad.Parse(element_e);
 						if (loader.LoadMode == SutoriLoadMode.Immediate) {
-							await self.AddMomentsFromXmlUri(loader.Path);
+							await self.AddDataFromXmlUri(loader.Path);
 							loader.Loaded = true;
 						}
 						moment.Elements.push(loader);
@@ -106,7 +112,17 @@ class SutoriDocument {
 			 if (typeof exclude !== 'undefined' && exclude.indexOf(attr.name) > -1) continue;
 			 moment.Attributes[attr.name] = attr.value;
 		}
-  }
+	}
+
+
+	/**
+	 * Add an actor instance to this document.
+	 * @param actor The actor instance.
+	 */
+	AddActor(actor: SutoriActor) {
+		this.Actors.push(actor);
+	}
+
 
 	/**
 	 * Add a moment instance to this document.

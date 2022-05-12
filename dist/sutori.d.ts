@@ -1,4 +1,16 @@
 /**
+ * The base class for all moment elements.
+ */
+declare class SutoriActor {
+    Attributes: object;
+    ContentCulture: SutoriCulture;
+    Elements: Array<SutoriElement>;
+    ID: string;
+    Name: string;
+    constructor();
+    static Parse(actor_e: HTMLElement): SutoriActor;
+}
+/**
  * Describes information passed to client code when a challenge event occurs.
  */
 declare class SutoriChallengeEvent {
@@ -48,6 +60,7 @@ declare class SutoriChallengeEvent {
  * Describes a document of multimedia moments.
  */
 declare class SutoriDocument {
+    Actors: Array<SutoriActor>;
     Moments: Array<SutoriMoment>;
     constructor();
     /**
@@ -60,12 +73,12 @@ declare class SutoriDocument {
      * Append moments from an XML file.
      * @param uri The uri location of the XML file to load.
      */
-    AddMomentsFromXmlUri(uri: string): Promise<void>;
+    AddDataFromXmlUri(uri: string): Promise<void>;
     /**
      * Append moments from a raw XML string.
      * @param raw_xml The raw XML string to parse.
      */
-    AddMomentsFromXml(raw_xml: string): void;
+    AddDataFromXml(raw_xml: string): void;
     /**
      * Called by AddMomentsFromXml to add extra attributes when reading moments.
      * @param moment The target moment to manipulate.
@@ -73,6 +86,11 @@ declare class SutoriDocument {
      * @param exclude An array of keys to exclude.
      */
     private AddMomentAttributes;
+    /**
+     * Add an actor instance to this document.
+     * @param actor The actor instance.
+     */
+    AddActor(actor: SutoriActor): void;
     /**
      * Add a moment instance to this document.
      * @param moment The moment instance.
@@ -82,7 +100,7 @@ declare class SutoriDocument {
 /**
  * The base class for all moment elements.
  */
-declare class SutoriElement {
+declare abstract class SutoriElement {
     Attributes: Object;
     ContentCulture: SutoriCulture;
     /**
@@ -91,59 +109,6 @@ declare class SutoriElement {
      * @param exclude An array of keys to exclude.
      */
     protected ParseExtraAttributes(element: HTMLElement, exclude?: Array<string>): void;
-}
-/**
- * Describes an audio moment element.
- */
-declare class SutoriElementAudio extends SutoriElement {
-    Src: string;
-    constructor();
-    static Parse(element: HTMLElement): SutoriElementAudio;
-}
-/**
- * Describes an image moment element.
- */
-declare class SutoriElementImage extends SutoriElement {
-    Src: string;
-    constructor();
-    static Parse(element: HTMLElement): SutoriElementImage;
-}
-/**
- * Describes a load moment element that loads further moments.
- */
-declare class SutoriElementLoad extends SutoriElement {
-    Path: string;
-    LoadMode: SutoriLoadMode;
-    Loaded: boolean;
-    constructor();
-    static Parse(element: HTMLElement): SutoriElementLoad;
-}
-/**
- * Describes an option moment element.
- */
-declare class SutoriElementOption extends SutoriElement {
-    Text: string;
-    Target: string;
-    Solver: SutoriSolver;
-    SolverCallback: string;
-    constructor();
-    static Parse(element: HTMLElement): SutoriElementOption;
-}
-/**
- * Describes a text moment element.
- */
-declare class SutoriElementText extends SutoriElement {
-    Text: string;
-    constructor();
-    static Parse(element: HTMLElement): SutoriElementText;
-}
-/**
- * Describes a video moment element.
- */
-declare class SutoriElementVideo extends SutoriElement {
-    Src: string;
-    constructor();
-    static Parse(element: HTMLElement): SutoriElementVideo;
 }
 /**
  * A prompt engine for VNS.
@@ -175,13 +140,13 @@ declare class SutoriEngine {
     GotoNextMoment(): void;
 }
 /**
- *
+ * Describes a moment in time.
  */
 declare class SutoriMoment {
-    Elements: Array<SutoriElement>;
     Attributes: Object;
-    ID: string;
+    Elements: Array<SutoriElement>;
     Goto: string;
+    ID: string;
     constructor();
     /**
      * Add a text element to this moment.
@@ -226,7 +191,7 @@ declare class SutoriMoment {
     GetLoaderElements(mode: SutoriLoadMode): Array<SutoriElementLoad>;
 }
 /**
- *
+ * Various helper tools.
  */
 declare class SutoriTools {
     /**
@@ -246,11 +211,125 @@ declare class SutoriTools {
      */
     static ParseLoadMode(loadMode: string): SutoriLoadMode;
 }
-declare enum SutoriLoadMode {
-    /** Load immediately. */
-    Immediate = "immediate",
-    /** Only load when the parent moment is encountered */
-    OnEncounter = "encounter"
+/**
+ * Describes an audio moment element.
+ */
+declare class SutoriElementAudio extends SutoriElement {
+    /**
+     * The associated actor id.
+     */
+    Actor?: string;
+    /**
+     * The audio file uri.
+     */
+    Src: string;
+    constructor();
+    static Parse(element: HTMLElement): SutoriElementAudio;
+    /**
+     * Try to get an associated actor for this element.
+     * @param document The owner document.
+     */
+    GetAssociatedActor(document: SutoriDocument): SutoriActor;
+}
+/**
+ * Describes an image moment element.
+ */
+declare class SutoriElementImage extends SutoriElement {
+    /**
+     * The associated actor id.
+     */
+    Actor?: string;
+    /**
+     * The purpose of this image. For example; avatar, background etc...
+     */
+    Purpose?: string;
+    /**
+     * The image file uri.
+     */
+    Src: string;
+    constructor();
+    static Parse(element: HTMLElement): SutoriElementImage;
+    /**
+     * Try to get an associated actor for this element.
+     * @param document The owner document.
+     */
+    GetAssociatedActor(document: SutoriDocument): SutoriActor;
+}
+/**
+ * Describes a load moment element that loads further moments.
+ */
+declare class SutoriElementLoad extends SutoriElement {
+    /**
+     * The uri of the xml file to load.
+     */
+    Path: string;
+    /**
+     * Weather to load the xml immediately, or only when this element is encountered.
+     */
+    LoadMode: SutoriLoadMode;
+    /**
+     * Weather or not the content has been loaded yet.
+     */
+    Loaded: boolean;
+    constructor();
+    static Parse(element: HTMLElement): SutoriElementLoad;
+}
+/**
+ * Describes an option moment element.
+ */
+declare class SutoriElementOption extends SutoriElement {
+    /**
+     * The textual content of this option.
+     */
+    Text: string;
+    /**
+     * The moment id target destination.
+     */
+    Target?: string;
+    /**
+     * The logical method to use to determine weather this option has been chosen.
+     */
+    Solver: SutoriSolver;
+    /**
+     * If a Custom solver is chosen, specify a callback to handle the solving.
+     */
+    SolverCallback?: string;
+    constructor();
+    static Parse(element: HTMLElement): SutoriElementOption;
+}
+/**
+ * Describes a text moment element.
+ */
+declare class SutoriElementText extends SutoriElement {
+    /**
+     * The associated actor id.
+     */
+    Actor?: string;
+    /**
+     * The textual content of this element.
+     */
+    Text: string;
+    constructor();
+    static Parse(element: HTMLElement): SutoriElementText;
+    /**
+     * Try to get an associated actor for this element.
+     * @param document The owner document.
+     */
+    GetAssociatedActor(document: SutoriDocument): SutoriActor;
+}
+/**
+ * Describes a video moment element.
+ */
+declare class SutoriElementVideo extends SutoriElement {
+    Actor?: string;
+    Src: string;
+    constructor();
+    static Parse(element: HTMLElement): SutoriElementVideo;
+    /**
+     * Try to get an associated actor for this element.
+     * @param document The owner document.
+     */
+    GetAssociatedActor(document: SutoriDocument): SutoriActor;
 }
 declare enum SutoriCulture {
     None = "none",
@@ -267,6 +346,12 @@ declare enum SutoriCulture {
     esMX = "es-MX",
     itIT = "it-IT",
     jaJP = "ja-JP"
+}
+declare enum SutoriLoadMode {
+    /** Load immediately. */
+    Immediate = "immediate",
+    /** Only load when the parent moment is encountered */
+    OnEncounter = "encounter"
 }
 declare enum SutoriSolver {
     /** use this when no solver is required */
