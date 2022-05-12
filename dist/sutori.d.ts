@@ -143,10 +143,26 @@ declare class SutoriEngine {
  * Describes a moment in time.
  */
 declare class SutoriMoment {
+    /**
+     * This moments attributes.
+     */
     Attributes: Object;
+    /**
+     * The elements for this moment.
+     */
     Elements: Array<SutoriElement>;
+    /**
+     * The next moment id to goto if no other navigation happens after this moment is encountered.
+     */
     Goto: string;
+    /**
+     * The moment id.
+     */
     ID: string;
+    /**
+     * Weather to clear the screen/terminal when this moment is encountered, set to false to layer moments.
+     */
+    Clear: boolean;
     constructor();
     /**
      * Add a text element to this moment.
@@ -194,6 +210,12 @@ declare class SutoriMoment {
  * Various helper tools.
  */
 declare class SutoriTools {
+    /**
+     * Return true of the passed text is either true or 1.
+     * @param text
+     * @returns
+     */
+    static ParseBool(text: string): boolean;
     /**
      * Convert the text value of a culture into the enum key equivalent. For
      * example 'en-GB' becomes VnCulture.enGB

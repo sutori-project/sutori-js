@@ -32,7 +32,7 @@
 			<text data-example="test">Hi there!</text>
 		</moment>
 
-		<moment data-example="another test">
+		<moment data-example="another test" clear="false">
 			<text>This is a demonstration showing how sutori-js works!</text>
 		</moment>
 

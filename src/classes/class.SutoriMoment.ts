@@ -2,10 +2,30 @@
  * Describes a moment in time.
  */
 class SutoriMoment {
+	/**
+	 * This moments attributes.
+	 */
 	Attributes: Object;
+
+	/**
+	 * The elements for this moment.
+	 */
 	Elements: Array<SutoriElement>;
+
+	/**
+	 * The next moment id to goto if no other navigation happens after this moment is encountered.
+	 */
 	Goto: string;
+
+	/**
+	 * The moment id.
+	 */
 	ID: string;
+
+	/**
+	 * Weather to clear the screen/terminal when this moment is encountered, set to false to layer moments.
+	 */
+	Clear: boolean;
 
 	
 	constructor() {
@@ -13,6 +33,7 @@ class SutoriMoment {
 		this.Elements = new Array<SutoriElement>();
 		this.Goto = '';
 		this.ID = '';
+		this.Clear = true;
 	}
 
 

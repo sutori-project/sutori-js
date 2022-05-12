@@ -159,7 +159,10 @@ class SutoriDocument {
             if (moment_e.hasAttribute('goto')) {
                 moment.Goto = moment_e.attributes['goto'].textContent;
             }
-            self.AddMomentAttributes(moment, moment_e, ['id', 'goto']);
+            if (moment_e.hasAttribute('clear')) {
+                moment.Clear = SutoriTools.ParseBool(moment_e.attributes['clear'].textContent);
+            }
+            self.AddMomentAttributes(moment, moment_e, ['id', 'goto', 'clear']);
             moment_e.querySelectorAll(':scope > *').forEach(async (element_e) => {
                 switch (element_e.tagName) {
                     case 'text':
@@ -315,6 +318,7 @@ class SutoriMoment {
         this.Elements = new Array();
         this.Goto = '';
         this.ID = '';
+        this.Clear = true;
     }
     /**
      * Add a text element to this moment.
@@ -397,6 +401,19 @@ class SutoriMoment {
  * Various helper tools.
  */
 class SutoriTools {
+    /**
+     * Return true of the passed text is either true or 1.
+     * @param text
+     * @returns
+     */
+    static ParseBool(text) {
+        if (!text)
+            return false;
+        const str = String(text).toLowerCase();
+        if (str == "true")
+            return true;
+        return (str === "1");
+    }
     /**
      * Convert the text value of a culture into the enum key equivalent. For
      * example 'en-GB' becomes VnCulture.enGB

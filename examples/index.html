@@ -34,7 +34,16 @@
 			// handle what happens when the server challenges for a response.
 			engine.HandleChallenge = function(event) {
 				const dialog = document.getElementById('dialog0');
-				dialog.innerHTML = '';
+
+				// check if we should clear the screen.
+				if (event.Moment.Clear === true) {
+					dialog.innerHTML = '';
+				}
+				else {
+					dialog.querySelectorAll('button').forEach(button => {
+						button.remove();
+					});
+				}
 
 				// add images.
 				event.GetImages(culture).forEach(imageElement => {
@@ -47,12 +56,7 @@
 				event.GetText(culture).forEach(textElement => {
 					const actor = textElement.GetAssociatedActor(doc);
 					const p = document.createElement('p');
-					if (actor) {
-						p.textContent = actor.Name + ": " + textElement.Text;
-					}
-					else {
-						p.textContent = textElement.Text;
-					}
+					p.textContent = (actor ? actor.Name + ": " : '') + textElement.Text;
 					dialog.appendChild(p);
 				});
 

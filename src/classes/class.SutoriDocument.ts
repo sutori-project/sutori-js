@@ -63,7 +63,11 @@ class SutoriDocument {
 				moment.Goto = moment_e.attributes['goto'].textContent;
 			}
 
-			self.AddMomentAttributes(moment, moment_e, ['id', 'goto']);
+			if (moment_e.hasAttribute('clear')) {
+				moment.Clear = SutoriTools.ParseBool(moment_e.attributes['clear'].textContent);
+			}
+
+			self.AddMomentAttributes(moment, moment_e, ['id', 'goto', 'clear']);
 
 			moment_e.querySelectorAll(':scope > *').forEach(async (element_e: HTMLElement) => {
 				switch (element_e.tagName) {

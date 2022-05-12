@@ -3,6 +3,18 @@
  */
 class SutoriTools {
 	/**
+	 * Return true of the passed text is either true or 1.
+	 * @param text 
+	 * @returns 
+	 */
+	static ParseBool(text: string) : boolean {
+		if (!text) return false;
+		const str = String(text).toLowerCase();
+		if (str == "true") return true;
+		return (str === "1");
+	}
+
+	/**
 	 * Convert the text value of a culture into the enum key equivalent. For
 	 * example 'en-GB' becomes VnCulture.enGB
 	 * @param cultureName 
