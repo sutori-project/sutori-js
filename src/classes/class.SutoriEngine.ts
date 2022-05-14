@@ -35,7 +35,7 @@ class SutoriEngine {
 		this.Cursor = moment;
 
 		// execute any load elements set to encounter.
-		const loaderElements = moment.GetLoaderElements(SutoriLoadMode.OnEncounter);
+		const loaderElements = moment.GetLoaderElements();
 		if (loaderElements && loaderElements.length > 0) {
 			for (let i=0; i<loaderElements.length; i++) {
 				await self.Document.AddDataFromXmlUri(loaderElements[i].Path);

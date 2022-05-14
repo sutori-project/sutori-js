@@ -181,13 +181,7 @@ class SutoriDocument {
                         moment.Elements.push(SutoriElementVideo.Parse(element_e));
                         break;
                     case 'load':
-                        // execute any load elements set to immediate or '''.
-                        const loader = SutoriElementLoad.Parse(element_e);
-                        if (loader.LoadMode == SutoriLoadMode.Immediate) {
-                            await self.AddDataFromXmlUri(loader.Path);
-                            loader.Loaded = true;
-                        }
-                        moment.Elements.push(loader);
+                        moment.Elements.push(SutoriElementLoad.Parse(element_e));
                         break;
                 }
             });
@@ -273,7 +267,7 @@ class SutoriEngine {
             throw new Error("Document does not have any beads!");
         this.Cursor = moment;
         // execute any load elements set to encounter.
-        const loaderElements = moment.GetLoaderElements(SutoriLoadMode.OnEncounter);
+        const loaderElements = moment.GetLoaderElements();
         if (loaderElements && loaderElements.length > 0) {
             for (let i = 0; i < loaderElements.length; i++) {
                 await self.Document.AddDataFromXmlUri(loaderElements[i].Path);
@@ -391,10 +385,9 @@ class SutoriMoment {
      * Find all loader elements.
      * @param mode The mode.
      */
-    GetLoaderElements(mode) {
+    GetLoaderElements() {
         const elements = this.Elements.filter(e => e instanceof SutoriElementLoad);
-        const casted = elements;
-        return casted.filter(e => e.LoadMode == mode);
+        return elements;
     }
 }
 /**
@@ -435,15 +428,6 @@ class SutoriTools {
         const stringKey = (_a = Object.entries(SutoriSolver)
             .find(([key, val]) => val === solverName)) === null || _a === void 0 ? void 0 : _a[0];
         return SutoriSolver[stringKey];
-    }
-    /**
-     * Convert the text value of a load mode into the enum key equivalent.
-     */
-    static ParseLoadMode(loadMode) {
-        var _a;
-        const stringKey = (_a = Object.entries(SutoriLoadMode)
-            .find(([key, val]) => val === loadMode)) === null || _a === void 0 ? void 0 : _a[0];
-        return SutoriLoadMode[stringKey];
     }
 }
 /**
@@ -521,7 +505,6 @@ class SutoriElementImage extends SutoriElement {
 class SutoriElementLoad extends SutoriElement {
     constructor() {
         super();
-        this.LoadMode = SutoriLoadMode.Immediate;
         this.ContentCulture = SutoriCulture.None;
         this.Loaded = false;
     }
@@ -529,10 +512,6 @@ class SutoriElementLoad extends SutoriElement {
         const result = new SutoriElementLoad();
         result.Path = element.textContent;
         result.ParseExtraAttributes(element, ['mode']);
-        if (element.hasAttribute('mode')) {
-            const mode = element.attributes['mode'].textContent;
-            result.LoadMode = SutoriTools.ParseLoadMode(mode);
-        }
         return result;
     }
 }
@@ -651,13 +630,6 @@ var SutoriCulture;
     SutoriCulture["itIT"] = "it-IT";
     SutoriCulture["jaJP"] = "ja-JP"; /* Japanese (Japan) */
 })(SutoriCulture || (SutoriCulture = {}));
-var SutoriLoadMode;
-(function (SutoriLoadMode) {
-    /** Load immediately. */
-    SutoriLoadMode["Immediate"] = "immediate";
-    /** Only load when the parent moment is encountered */
-    SutoriLoadMode["OnEncounter"] = "encounter";
-})(SutoriLoadMode || (SutoriLoadMode = {}));
 var SutoriSolver;
 (function (SutoriSolver) {
     /** use this when no solver is required */

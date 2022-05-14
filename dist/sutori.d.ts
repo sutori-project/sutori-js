@@ -204,7 +204,7 @@ declare class SutoriMoment {
      * Find all loader elements.
      * @param mode The mode.
      */
-    GetLoaderElements(mode: SutoriLoadMode): Array<SutoriElementLoad>;
+    GetLoaderElements(): Array<SutoriElementLoad>;
 }
 /**
  * Various helper tools.
@@ -228,10 +228,6 @@ declare class SutoriTools {
      * @param solverName
      */
     static ParseSolver(solverName: string): SutoriSolver;
-    /**
-     * Convert the text value of a load mode into the enum key equivalent.
-     */
-    static ParseLoadMode(loadMode: string): SutoriLoadMode;
 }
 /**
  * Describes an audio moment element.
@@ -285,10 +281,6 @@ declare class SutoriElementLoad extends SutoriElement {
      * The uri of the xml file to load.
      */
     Path: string;
-    /**
-     * Weather to load the xml immediately, or only when this element is encountered.
-     */
-    LoadMode: SutoriLoadMode;
     /**
      * Weather or not the content has been loaded yet.
      */
@@ -368,12 +360,6 @@ declare enum SutoriCulture {
     esMX = "es-MX",
     itIT = "it-IT",
     jaJP = "ja-JP"
-}
-declare enum SutoriLoadMode {
-    /** Load immediately. */
-    Immediate = "immediate",
-    /** Only load when the parent moment is encountered */
-    OnEncounter = "encounter"
 }
 declare enum SutoriSolver {
     /** use this when no solver is required */

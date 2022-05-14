@@ -87,13 +87,7 @@ class SutoriDocument {
 						moment.Elements.push(SutoriElementVideo.Parse(element_e));
 						break;
 					case 'load':
-						// execute any load elements set to immediate or '''.
-						const loader = SutoriElementLoad.Parse(element_e);
-						if (loader.LoadMode == SutoriLoadMode.Immediate) {
-							await self.AddDataFromXmlUri(loader.Path);
-							loader.Loaded = true;
-						}
-						moment.Elements.push(loader);
+						moment.Elements.push(SutoriElementLoad.Parse(element_e));
 						break;
 				}
 			});

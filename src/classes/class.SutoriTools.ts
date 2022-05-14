@@ -36,14 +36,4 @@ class SutoriTools {
 								.find(([key, val]) => val === solverName)?.[0];
 		return SutoriSolver[stringKey];
 	}
-
-
-	/**
-	 * Convert the text value of a load mode into the enum key equivalent.
-	 */
-	static ParseLoadMode(loadMode: string) : SutoriLoadMode {
-		const stringKey = Object.entries(SutoriLoadMode)
-								.find(([key, val]) => val === loadMode)?.[0];
-		return SutoriLoadMode[stringKey];
-	}
 }

@@ -118,9 +118,8 @@ class SutoriMoment {
 	 * Find all loader elements.
 	 * @param mode The mode.
 	 */
-	GetLoaderElements(mode: SutoriLoadMode) :Array<SutoriElementLoad> {
+	GetLoaderElements() :Array<SutoriElementLoad> {
 		const elements = this.Elements.filter(e => e instanceof SutoriElementLoad);
-		const casted = elements as Array<SutoriElementLoad>;
-		return casted.filter(e => e.LoadMode == mode);
+		return elements as Array<SutoriElementLoad>;
 	}
 }

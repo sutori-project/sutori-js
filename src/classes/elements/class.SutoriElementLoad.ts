@@ -8,19 +8,13 @@ class SutoriElementLoad extends SutoriElement {
 	Path: string;
 
 	/**
-	 * Weather to load the xml immediately, or only when this element is encountered.
-	 */
-	LoadMode: SutoriLoadMode;
-
-	/**
 	 * Weather or not the content has been loaded yet.
 	 */
 	Loaded: boolean;
 
 
 	constructor() {
-		super();
-		this.LoadMode = SutoriLoadMode.Immediate;
+		super()
 		this.ContentCulture = SutoriCulture.None;
 		this.Loaded = false;
 	}
@@ -30,12 +24,6 @@ class SutoriElementLoad extends SutoriElement {
 		const result = new SutoriElementLoad();
 		result.Path = element.textContent;
 		result.ParseExtraAttributes(element, ['mode']);
-
-		if (element.hasAttribute('mode')) {
-			const mode = element.attributes['mode'].textContent;
-			result.LoadMode = SutoriTools.ParseLoadMode(mode);
-		}
-
 		return result;
 	}
 }

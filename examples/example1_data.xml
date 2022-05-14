@@ -46,7 +46,7 @@
 			<option lang="fr-FR" target="door2">Porte 2</option>
 			<option lang="fr-FR" target="door3">Porte 3</option>
 			<!-- load element loads further moments when encountered -->
-			<load mode="encounter">example1_data2.xml</load>
+			<load>example1_data2.xml</load>
 		</moment>
 	</moments>
 </document>
