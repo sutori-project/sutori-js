@@ -35,7 +35,7 @@ class SutoriDocument {
 		const response = await fetch(uri);
 		const raw_xml = await response.text();
 		console.log("loading moments from " + uri);
-		this.AddDataFromXml(raw_xml);
+		await this.AddDataFromXml(raw_xml);
 	}
 
 
@@ -43,10 +43,18 @@ class SutoriDocument {
 	 * Append moments from a raw XML string.
 	 * @param raw_xml The raw XML string to parse.
 	 */
-	AddDataFromXml(raw_xml: string) {
+	async AddDataFromXml(raw_xml: string) {
 		const xml_parser = new DOMParser();
 		const xml = xml_parser.parseFromString(raw_xml, "text/xml");
 		const self = this;
+
+		const includes = xml.querySelectorAll('include');
+		for (let i=0; i<includes.length; i++) {
+			const include = includes[i];
+			if (include.hasAttribute('after') === false) {
+				await this.AddDataFromXmlUri(include.textContent);
+			}
+		}
 
 		xml.querySelectorAll('actors actor').forEach((actor_e: HTMLElement) => {
 			self.Actors.push(SutoriActor.Parse(actor_e));
@@ -94,6 +102,13 @@ class SutoriDocument {
 
 			self.Moments.push(moment);
 		});
+
+		for (let i=0; i<includes.length; i++) {
+			const include = includes[i];
+			if (include.hasAttribute('after') === true) {
+				await this.AddDataFromXmlUri(include.textContent);
+			}
+		}
 	}
 
 

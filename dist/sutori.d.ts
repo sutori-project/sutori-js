@@ -78,7 +78,7 @@ declare class SutoriDocument {
      * Append moments from a raw XML string.
      * @param raw_xml The raw XML string to parse.
      */
-    AddDataFromXml(raw_xml: string): void;
+    AddDataFromXml(raw_xml: string): Promise<void>;
     /**
      * Called by AddMomentsFromXml to add extra attributes when reading moments.
      * @param moment The target moment to manipulate.

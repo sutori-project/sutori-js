@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <document xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	<!-- you can have multiple includes -->
+	<include>example1_data3.xml</include>
+	<!-- you cana also include files after this one has loaded like this -->
+	<!-- include after="true">example1_data4.xml</include -->
 	<actors>
 		<!--
 			tips on actors:
