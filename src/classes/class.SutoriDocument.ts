@@ -97,6 +97,12 @@ class SutoriDocument {
 					case 'load':
 						moment.Elements.push(SutoriElementLoad.Parse(element_e));
 						break;
+					case 'set':
+						moment.Elements.push(SutoriElementSet.Parse(element_e));
+						break;
+					case 'trigger':
+						moment.Elements.push(SutoriElementTrigger.Parse(element_e));
+						break;
 				}
 			});
 

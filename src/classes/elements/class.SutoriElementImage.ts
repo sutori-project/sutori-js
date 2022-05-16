@@ -32,7 +32,7 @@ class SutoriElementImage extends SutoriElement {
 	static Parse(element: HTMLElement) {
 		const result = new SutoriElementImage();
 		result.Src = element.textContent;
-		result.ParseExtraAttributes(element, ['actor', 'purpose', 'lang']);
+		result.ParseExtraAttributes(element, ['actor', 'purpose', 'lang', 'preload']);
 
 		if (element.hasAttribute('actor')) {
 			result.Actor = element.attributes['actor'].textContent;

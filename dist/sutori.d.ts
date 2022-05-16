@@ -317,6 +317,21 @@ declare class SutoriElementOption extends SutoriElement {
     static Parse(element: HTMLElement): SutoriElementOption;
 }
 /**
+ * Describes a load moment element that loads further moments.
+ */
+declare class SutoriElementSet extends SutoriElement {
+    /**
+     * The value of the property.
+     */
+    Value: string;
+    /**
+     * The property name.
+     */
+    Name: string;
+    constructor();
+    static Parse(element: HTMLElement): SutoriElementSet;
+}
+/**
  * Describes a text moment element.
  */
 declare class SutoriElementText extends SutoriElement {
@@ -335,6 +350,21 @@ declare class SutoriElementText extends SutoriElement {
      * @param document The owner document.
      */
     GetAssociatedActor(document: SutoriDocument): SutoriActor;
+}
+/**
+ * Describes a load moment element that loads further moments.
+ */
+declare class SutoriElementTrigger extends SutoriElement {
+    /**
+     * The body of the trigger.
+     */
+    Body: string;
+    /**
+     * Weather or not the content has been loaded yet.
+     */
+    Action?: string;
+    constructor();
+    static Parse(element: HTMLElement): SutoriElementTrigger;
 }
 /**
  * Describes a video moment element.

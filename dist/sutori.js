@@ -190,6 +190,12 @@ class SutoriDocument {
                     case 'load':
                         moment.Elements.push(SutoriElementLoad.Parse(element_e));
                         break;
+                    case 'set':
+                        moment.Elements.push(SutoriElementSet.Parse(element_e));
+                        break;
+                    case 'trigger':
+                        moment.Elements.push(SutoriElementTrigger.Parse(element_e));
+                        break;
                 }
             });
             self.Moments.push(moment);
@@ -489,7 +495,7 @@ class SutoriElementImage extends SutoriElement {
     static Parse(element) {
         const result = new SutoriElementImage();
         result.Src = element.textContent;
-        result.ParseExtraAttributes(element, ['actor', 'purpose', 'lang']);
+        result.ParseExtraAttributes(element, ['actor', 'purpose', 'lang', 'preload']);
         if (element.hasAttribute('actor')) {
             result.Actor = element.attributes['actor'].textContent;
         }
@@ -574,6 +580,25 @@ class SutoriElementOption extends SutoriElement {
     }
 }
 /**
+ * Describes a load moment element that loads further moments.
+ */
+class SutoriElementSet extends SutoriElement {
+    constructor() {
+        super();
+        this.ContentCulture = SutoriCulture.None;
+        this.Name = null;
+    }
+    static Parse(element) {
+        const result = new SutoriElementSet();
+        result.Value = element.textContent;
+        result.ParseExtraAttributes(element, ['name']);
+        if (element.hasAttribute('name')) {
+            result.Name = element.attributes['name'].textContent;
+        }
+        return result;
+    }
+}
+/**
  * Describes a text moment element.
  */
 class SutoriElementText extends SutoriElement {
@@ -604,6 +629,25 @@ class SutoriElementText extends SutoriElement {
             return null;
         // find the actor.
         return document.Actors.find(t => t.ID == this.Actor);
+    }
+}
+/**
+ * Describes a load moment element that loads further moments.
+ */
+class SutoriElementTrigger extends SutoriElement {
+    constructor() {
+        super();
+        this.ContentCulture = SutoriCulture.None;
+        this.Action = null;
+    }
+    static Parse(element) {
+        const result = new SutoriElementTrigger();
+        result.Body = element.textContent;
+        result.ParseExtraAttributes(element, ['action']);
+        if (element.hasAttribute('action')) {
+            result.Action = element.attributes['action'].textContent;
+        }
+        return result;
     }
 }
 /**
