@@ -10,7 +10,12 @@ class SutoriElementImage extends SutoriElement {
 	/**
 	 * The purpose of this image. For example; avatar, background etc...
 	 */
-	Purpose?: string;
+	For?: string;
+
+	/**
+	 * Weather or not to preload this image.
+	 */
+	Preload: boolean;
 
 	/**
 	 * The image file uri.
@@ -33,13 +38,25 @@ class SutoriElementImage extends SutoriElement {
 			result.Actor = element.attributes['actor'].textContent;
 		}
 
-		if (element.hasAttribute('purpose')) {
-			result.Purpose = element.attributes['purpose'].textContent;
+		if (element.hasAttribute('for')) {
+			result.For = element.attributes['for'].textContent;
 		}
 
 		if (element.hasAttribute('lang')) {
 			const lang = element.attributes['lang'].textContent;
 			result.ContentCulture = SutoriTools.ParseCulture(lang);
+		}
+
+		if (element.hasAttribute('preload')) {
+			const preload = SutoriTools.ParseBool(element.attributes['preload'].textContent);
+			result.Preload = preload;
+			if (preload === true) {
+				const img = new Image();
+				img.src == result.Src;
+			}
+		}
+		else {
+			result.Preload = false;
 		}
 
 		return result;

@@ -299,21 +299,23 @@ class SutoriEngine {
      * Go to the next logical moment. The next sequential moment is selected,
      * unless the current moment has a goto option, which will be used instead
      * if found.
+     * @returns boolean True if successful.
      */
     GotoNextMoment() {
         if (this.Cursor == null)
             return; // no cursor present.
         const index = this.Document.Moments.indexOf(this.Cursor);
         if (index == -1)
-            return; // cursor doesn't belong to document.
+            return false; // cursor doesn't belong to document.
         // if the moment has a goto, use that instead.
         if (this.Cursor.Goto != '') {
             this.GotoMomentID(this.Cursor.Goto);
-            return;
+            return false;
         }
         if (index == this.Document.Moments.length - 1)
-            return; // end of sequence.
+            return false; // end of sequence.
         this.GotoMoment(this.Document.Moments[index + 1]);
+        return true;
     }
 }
 /**
@@ -491,12 +493,23 @@ class SutoriElementImage extends SutoriElement {
         if (element.hasAttribute('actor')) {
             result.Actor = element.attributes['actor'].textContent;
         }
-        if (element.hasAttribute('purpose')) {
-            result.Purpose = element.attributes['purpose'].textContent;
+        if (element.hasAttribute('for')) {
+            result.For = element.attributes['for'].textContent;
         }
         if (element.hasAttribute('lang')) {
             const lang = element.attributes['lang'].textContent;
             result.ContentCulture = SutoriTools.ParseCulture(lang);
+        }
+        if (element.hasAttribute('preload')) {
+            const preload = SutoriTools.ParseBool(element.attributes['preload'].textContent);
+            result.Preload = preload;
+            if (preload === true) {
+                const img = new Image();
+                img.src == result.Src;
+            }
+        }
+        else {
+            result.Preload = false;
         }
         return result;
     }

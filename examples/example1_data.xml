@@ -12,7 +12,7 @@
 			- Allows elements such as images, videos etc...
 		-->
 		<actor id="player" name="The Player">
-			<image purpose="avatar">images/player.png</image>
+			<image for="avatar">images/player.png</image>
 		</actor>
 	</actors>
 	<moments>

@@ -136,8 +136,9 @@ declare class SutoriEngine {
      * Go to the next logical moment. The next sequential moment is selected,
      * unless the current moment has a goto option, which will be used instead
      * if found.
+     * @returns boolean True if successful.
      */
-    GotoNextMoment(): void;
+    GotoNextMoment(): boolean;
 }
 /**
  * Describes a moment in time.
@@ -260,7 +261,11 @@ declare class SutoriElementImage extends SutoriElement {
     /**
      * The purpose of this image. For example; avatar, background etc...
      */
-    Purpose?: string;
+    For?: string;
+    /**
+     * Weather or not to preload this image.
+     */
+    Preload: boolean;
     /**
      * The image file uri.
      */
