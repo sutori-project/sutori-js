@@ -60,8 +60,18 @@ declare class SutoriChallengeEvent {
  * Describes a document of multimedia moments.
  */
 declare class SutoriDocument {
+    /**
+     * An array of actors.
+     */
     Actors: Array<SutoriActor>;
+    /**
+     * An array of moments.
+     */
     Moments: Array<SutoriMoment>;
+    /**
+     * Define a custom loader for URIs. Takes a uri and returns the loaded xml string.
+     */
+    CustomUriLoader?: CallableFunction;
     constructor();
     /**
      * Load a SutoriDocument from an XML file.

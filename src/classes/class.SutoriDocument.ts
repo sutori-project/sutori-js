@@ -2,13 +2,26 @@
  * Describes a document of multimedia moments.
  */
 class SutoriDocument {
+	/**
+	 * An array of actors.
+	 */
 	Actors: Array<SutoriActor>;
+
+	/**
+	 * An array of moments.
+	 */
 	Moments: Array<SutoriMoment>;
+
+	/**
+	 * Define a custom loader for URIs. Takes a uri and returns the loaded xml string.
+	 */
+	CustomUriLoader?: CallableFunction;
 
 	
 	constructor() {
 		this.Actors = new Array<SutoriActor>();
 		this.Moments = new Array<SutoriMoment>();
+		this.CustomUriLoader = null;
 	}
 
 
@@ -32,10 +45,17 @@ class SutoriDocument {
 	 * @param uri The uri location of the XML file to load.
 	 */
 	async AddDataFromXmlUri(uri: string) {
-		const response = await fetch(uri);
-		const raw_xml = await response.text();
-		console.log("loading moments from " + uri);
-		await this.AddDataFromXml(raw_xml);
+		if (this.CustomUriLoader != null) {
+			const custom_raw_xml = this.CustomUriLoader(uri);
+			console.log("loading moments from " + uri);
+			await this.AddDataFromXml(custom_raw_xml);
+		}
+		else {
+			const response = await fetch(uri);
+			const raw_xml = await response.text();
+			console.log("loading moments from " + uri);
+			await this.AddDataFromXml(raw_xml);
+		}
 	}
 
 

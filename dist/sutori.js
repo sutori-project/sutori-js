@@ -116,6 +116,7 @@ class SutoriDocument {
     constructor() {
         this.Actors = new Array();
         this.Moments = new Array();
+        this.CustomUriLoader = null;
     }
     /**
      * Load a SutoriDocument from an XML file.
@@ -135,10 +136,17 @@ class SutoriDocument {
      * @param uri The uri location of the XML file to load.
      */
     async AddDataFromXmlUri(uri) {
-        const response = await fetch(uri);
-        const raw_xml = await response.text();
-        console.log("loading moments from " + uri);
-        await this.AddDataFromXml(raw_xml);
+        if (this.CustomUriLoader != null) {
+            const custom_raw_xml = this.CustomUriLoader(uri);
+            console.log("loading moments from " + uri);
+            await this.AddDataFromXml(custom_raw_xml);
+        }
+        else {
+            const response = await fetch(uri);
+            const raw_xml = await response.text();
+            console.log("loading moments from " + uri);
+            await this.AddDataFromXml(raw_xml);
+        }
     }
     /**
      * Append moments from a raw XML string.
