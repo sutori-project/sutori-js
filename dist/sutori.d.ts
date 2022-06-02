@@ -14,47 +14,10 @@ declare class SutoriActor {
  * Describes information passed to client code when a challenge event occurs.
  */
 declare class SutoriChallengeEvent {
-    Owner: SutoriEngine;
-    Moment: SutoriMoment;
-    ElementCount: Number;
+    readonly Owner: SutoriEngine;
+    readonly Moment: SutoriMoment;
+    readonly ElementCount: Number;
     constructor(owner: SutoriEngine, moment: SutoriMoment);
-    /**
-     * Get an array of elements of type.
-     * @param culture The SutoriCulture, default is: SutoriCulture.None
-     * @param type The type of element to return, for example SutoriElementText
-     * @returns An array of the type requested.
-     */
-    GetElements(culture?: SutoriCulture, type?: any): any[];
-    /**
-     * Get an array of text elements.
-     * @param culture The SutoriCulture, default is: SutoriCulture.None
-     * @returns An array of text elements.
-     */
-    GetText(culture?: SutoriCulture): Array<SutoriElementText>;
-    /**
-     * Get an array of option elements.
-     * @param culture The SutoriCulture, default is: SutoriCulture.None
-     * @returns An array of option elements.
-     */
-    GetOptions(culture?: SutoriCulture): Array<SutoriElementOption>;
-    /**
-     * Get an array of image elements.
-     * @param culture The SutoriCulture, default is: SutoriCulture.None
-     * @returns An array of image elements.
-     */
-    GetImages(culture?: SutoriCulture): Array<SutoriElementImage>;
-    /**
-     * Get an array of audio elements.
-     * @param culture The SutoriCulture, default is: SutoriCulture.None
-     * @returns An array of audio elements.
-     */
-    GetAudio(culture?: SutoriCulture): Array<SutoriElementImage>;
-    /**
-     * Get an array of video elements.
-     * @param culture The SutoriCulture, default is: SutoriCulture.None
-     * @returns An array of video elements.
-     */
-    GetVideos(culture?: SutoriCulture): Array<SutoriElementImage>;
 }
 /**
  * Describes a document of multimedia moments.
@@ -63,11 +26,15 @@ declare class SutoriDocument {
     /**
      * An array of actors.
      */
-    Actors: Array<SutoriActor>;
+    readonly Actors: Array<SutoriActor>;
     /**
      * An array of moments.
      */
-    Moments: Array<SutoriMoment>;
+    readonly Moments: Array<SutoriMoment>;
+    /**
+     * An array of include elements scoped to the entire document.
+     */
+    readonly Includes: Array<SutoriInclude>;
     /**
      * Define a custom loader for URIs. Takes a uri and returns the loaded xml string.
      */
@@ -151,6 +118,21 @@ declare class SutoriEngine {
     GotoNextMoment(): boolean;
 }
 /**
+ * Describes a load moment element that loads further moments.
+ */
+declare class SutoriInclude {
+    /**
+     * The uri of the xml file to load.
+     */
+    Path: string;
+    /**
+     * Weather to load the include after the document has loaded first.
+     */
+    After: boolean;
+    constructor();
+    static Parse(element: HTMLElement): SutoriInclude;
+}
+/**
  * Describes a moment in time.
  */
 declare class SutoriMoment {
@@ -216,6 +198,43 @@ declare class SutoriMoment {
      * @param mode The mode.
      */
     GetLoaderElements(): Array<SutoriElementLoad>;
+    /**
+     * Get an array of elements of type.
+     * @param culture The SutoriCulture, default is: SutoriCulture.None
+     * @param type The type of element to return, for example SutoriElementText
+     * @returns An array of the type requested.
+     */
+    GetElements(culture?: SutoriCulture, type?: any): any[];
+    /**
+     * Get an array of text elements.
+     * @param culture The SutoriCulture, default is: SutoriCulture.None
+     * @returns An array of text elements.
+     */
+    GetText(culture?: SutoriCulture): Array<SutoriElementText>;
+    /**
+     * Get an array of option elements.
+     * @param culture The SutoriCulture, default is: SutoriCulture.None
+     * @returns An array of option elements.
+     */
+    GetOptions(culture?: SutoriCulture): Array<SutoriElementOption>;
+    /**
+     * Get an array of image elements.
+     * @param culture The SutoriCulture, default is: SutoriCulture.None
+     * @returns An array of image elements.
+     */
+    GetImages(culture?: SutoriCulture): Array<SutoriElementImage>;
+    /**
+     * Get an array of audio elements.
+     * @param culture The SutoriCulture, default is: SutoriCulture.None
+     * @returns An array of audio elements.
+     */
+    GetAudio(culture?: SutoriCulture): Array<SutoriElementImage>;
+    /**
+     * Get an array of video elements.
+     * @param culture The SutoriCulture, default is: SutoriCulture.None
+     * @returns An array of video elements.
+     */
+    GetVideos(culture?: SutoriCulture): Array<SutoriElementImage>;
 }
 /**
  * Various helper tools.

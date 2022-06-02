@@ -56,58 +56,6 @@ class SutoriChallengeEvent {
         this.Moment = moment;
         this.ElementCount = moment.Elements.length;
     }
-    /**
-     * Get an array of elements of type.
-     * @param culture The SutoriCulture, default is: SutoriCulture.None
-     * @param type The type of element to return, for example SutoriElementText
-     * @returns An array of the type requested.
-     */
-    GetElements(culture, type) {
-        const elements = typeof culture == 'undefined'
-            ? this.Moment.Elements.filter(e => e instanceof type)
-            : this.Moment.Elements.filter(e => e instanceof type && (e.ContentCulture == culture || e.ContentCulture == SutoriCulture.All));
-        return elements;
-    }
-    /**
-     * Get an array of text elements.
-     * @param culture The SutoriCulture, default is: SutoriCulture.None
-     * @returns An array of text elements.
-     */
-    GetText(culture) {
-        return this.GetElements(culture, SutoriElementText);
-    }
-    /**
-     * Get an array of option elements.
-     * @param culture The SutoriCulture, default is: SutoriCulture.None
-     * @returns An array of option elements.
-     */
-    GetOptions(culture) {
-        return this.GetElements(culture, SutoriElementOption);
-    }
-    /**
-     * Get an array of image elements.
-     * @param culture The SutoriCulture, default is: SutoriCulture.None
-     * @returns An array of image elements.
-     */
-    GetImages(culture) {
-        return this.GetElements(culture, SutoriElementImage);
-    }
-    /**
-     * Get an array of audio elements.
-     * @param culture The SutoriCulture, default is: SutoriCulture.None
-     * @returns An array of audio elements.
-     */
-    GetAudio(culture) {
-        return this.GetElements(culture, SutoriElementAudio);
-    }
-    /**
-     * Get an array of video elements.
-     * @param culture The SutoriCulture, default is: SutoriCulture.None
-     * @returns An array of video elements.
-     */
-    GetVideos(culture) {
-        return this.GetElements(culture, SutoriElementVideo);
-    }
 }
 /**
  * Describes a document of multimedia moments.
@@ -116,6 +64,7 @@ class SutoriDocument {
     constructor() {
         this.Actors = new Array();
         this.Moments = new Array();
+        this.Includes = new Array();
         this.CustomUriLoader = null;
     }
     /**
@@ -137,7 +86,7 @@ class SutoriDocument {
      */
     async AddDataFromXmlUri(uri) {
         if (this.CustomUriLoader != null) {
-            const custom_raw_xml = this.CustomUriLoader(uri);
+            const custom_raw_xml = await this.CustomUriLoader(uri);
             console.log("loading moments from " + uri);
             await this.AddDataFromXml(custom_raw_xml);
         }
@@ -156,11 +105,13 @@ class SutoriDocument {
         const xml_parser = new DOMParser();
         const xml = xml_parser.parseFromString(raw_xml, "text/xml");
         const self = this;
-        const includes = xml.querySelectorAll('include');
-        for (let i = 0; i < includes.length; i++) {
-            const include = includes[i];
-            if (include.hasAttribute('after') === false) {
-                await this.AddDataFromXmlUri(include.textContent);
+        const includeElements = xml.querySelectorAll('include');
+        for (let i = 0; i < includeElements.length; i++) {
+            const includeElement = includeElements[i];
+            const include = SutoriInclude.Parse(includeElement);
+            self.Includes.push(include);
+            if (include.After === false) {
+                await this.AddDataFromXmlUri(include.Path);
             }
         }
         xml.querySelectorAll('actors actor').forEach((actor_e) => {
@@ -208,10 +159,10 @@ class SutoriDocument {
             });
             self.Moments.push(moment);
         });
-        for (let i = 0; i < includes.length; i++) {
-            const include = includes[i];
-            if (include.hasAttribute('after') === true) {
-                await this.AddDataFromXmlUri(include.textContent);
+        for (let i = 0; i < self.Includes.length; i++) {
+            const include = self.Includes[i];
+            if (include.After === true) {
+                await this.AddDataFromXmlUri(include.Path);
             }
         }
     }
@@ -333,6 +284,20 @@ class SutoriEngine {
     }
 }
 /**
+ * Describes a load moment element that loads further moments.
+ */
+class SutoriInclude {
+    constructor() {
+        this.Path = "";
+    }
+    static Parse(element) {
+        const result = new SutoriInclude();
+        result.Path = element.textContent;
+        result.After = element.hasAttribute('after') && element.attributes["after"] === true;
+        return result;
+    }
+}
+/**
  * Describes a moment in time.
  */
 class SutoriMoment {
@@ -417,6 +382,59 @@ class SutoriMoment {
     GetLoaderElements() {
         const elements = this.Elements.filter(e => e instanceof SutoriElementLoad);
         return elements;
+    }
+    /**
+     * Get an array of elements of type.
+     * @param culture The SutoriCulture, default is: SutoriCulture.None
+     * @param type The type of element to return, for example SutoriElementText
+     * @returns An array of the type requested.
+     */
+    GetElements(culture, type) {
+        const self = this;
+        const elements = typeof culture == 'undefined'
+            ? self.Elements.filter(e => e instanceof type)
+            : self.Elements.filter(e => e instanceof type && (e.ContentCulture == culture || e.ContentCulture == SutoriCulture.All));
+        return elements;
+    }
+    /**
+     * Get an array of text elements.
+     * @param culture The SutoriCulture, default is: SutoriCulture.None
+     * @returns An array of text elements.
+     */
+    GetText(culture) {
+        return this.GetElements(culture, SutoriElementText);
+    }
+    /**
+     * Get an array of option elements.
+     * @param culture The SutoriCulture, default is: SutoriCulture.None
+     * @returns An array of option elements.
+     */
+    GetOptions(culture) {
+        return this.GetElements(culture, SutoriElementOption);
+    }
+    /**
+     * Get an array of image elements.
+     * @param culture The SutoriCulture, default is: SutoriCulture.None
+     * @returns An array of image elements.
+     */
+    GetImages(culture) {
+        return this.GetElements(culture, SutoriElementImage);
+    }
+    /**
+     * Get an array of audio elements.
+     * @param culture The SutoriCulture, default is: SutoriCulture.None
+     * @returns An array of audio elements.
+     */
+    GetAudio(culture) {
+        return this.GetElements(culture, SutoriElementAudio);
+    }
+    /**
+     * Get an array of video elements.
+     * @param culture The SutoriCulture, default is: SutoriCulture.None
+     * @returns An array of video elements.
+     */
+    GetVideos(culture) {
+        return this.GetElements(culture, SutoriElementVideo);
     }
 }
 /**

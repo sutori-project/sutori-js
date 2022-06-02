@@ -5,12 +5,17 @@ class SutoriDocument {
 	/**
 	 * An array of actors.
 	 */
-	Actors: Array<SutoriActor>;
+	readonly Actors: Array<SutoriActor>;
 
 	/**
 	 * An array of moments.
 	 */
-	Moments: Array<SutoriMoment>;
+	readonly Moments: Array<SutoriMoment>;
+
+	/**
+	 * An array of include elements scoped to the entire document.
+	 */
+	readonly Includes: Array<SutoriInclude>;
 
 	/**
 	 * Define a custom loader for URIs. Takes a uri and returns the loaded xml string.
@@ -21,6 +26,7 @@ class SutoriDocument {
 	constructor() {
 		this.Actors = new Array<SutoriActor>();
 		this.Moments = new Array<SutoriMoment>();
+		this.Includes = new Array<SutoriInclude>();
 		this.CustomUriLoader = null;
 	}
 
@@ -30,7 +36,7 @@ class SutoriDocument {
 	 * @param uri The uri location of the XML file to load.
 	 * @returns The loaded document.
 	 */
-	static async LoadXml(uri: string) {
+	static async LoadXml(uri: string) : Promise<SutoriDocument> {
 		// create a new document.
 		const result = new SutoriDocument();
 		// load the document here.
@@ -46,7 +52,7 @@ class SutoriDocument {
 	 */
 	async AddDataFromXmlUri(uri: string) {
 		if (this.CustomUriLoader != null) {
-			const custom_raw_xml = this.CustomUriLoader(uri);
+			const custom_raw_xml = await this.CustomUriLoader(uri);
 			console.log("loading moments from " + uri);
 			await this.AddDataFromXml(custom_raw_xml);
 		}
@@ -68,11 +74,14 @@ class SutoriDocument {
 		const xml = xml_parser.parseFromString(raw_xml, "text/xml");
 		const self = this;
 
-		const includes = xml.querySelectorAll('include');
-		for (let i=0; i<includes.length; i++) {
-			const include = includes[i];
-			if (include.hasAttribute('after') === false) {
-				await this.AddDataFromXmlUri(include.textContent);
+		const includeElements = xml.querySelectorAll('include');
+
+		for (let i=0; i<includeElements.length; i++) {
+			const includeElement = includeElements[i];
+			const include = SutoriInclude.Parse(includeElement as HTMLElement);
+			self.Includes.push(include);
+			if (include.After === false) {
+				await this.AddDataFromXmlUri(include.Path);
 			}
 		}
 
@@ -129,10 +138,10 @@ class SutoriDocument {
 			self.Moments.push(moment);
 		});
 
-		for (let i=0; i<includes.length; i++) {
-			const include = includes[i];
-			if (include.hasAttribute('after') === true) {
-				await this.AddDataFromXmlUri(include.textContent);
+		for (let i=0; i<self.Includes.length; i++) {
+			const include = self.Includes[i] as SutoriInclude;
+			if (include.After === true) {
+				await this.AddDataFromXmlUri(include.Path);
 			}
 		}
 	}

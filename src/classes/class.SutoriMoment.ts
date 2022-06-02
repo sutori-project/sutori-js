@@ -122,4 +122,69 @@ class SutoriMoment {
 		const elements = this.Elements.filter(e => e instanceof SutoriElementLoad);
 		return elements as Array<SutoriElementLoad>;
 	}
+
+
+	/**
+	 * Get an array of elements of type.
+	 * @param culture The SutoriCulture, default is: SutoriCulture.None
+	 * @param type The type of element to return, for example SutoriElementText
+	 * @returns An array of the type requested.
+	 */
+	 GetElements(culture?: SutoriCulture, type?: any) {
+		const self = this;
+		const elements = typeof culture == 'undefined'
+						 ? self.Elements.filter(e => e instanceof type)
+						 : self.Elements.filter(e => e instanceof type && (e.ContentCulture == culture || e.ContentCulture == SutoriCulture.All));
+		return elements as Array<typeof type>;
+	}
+
+
+	/**
+	 * Get an array of text elements.
+	 * @param culture The SutoriCulture, default is: SutoriCulture.None
+	 * @returns An array of text elements.
+	 */
+	GetText(culture?: SutoriCulture) : Array<SutoriElementText> {
+		return this.GetElements(culture, SutoriElementText);
+	}
+
+
+	/**
+	 * Get an array of option elements.
+	 * @param culture The SutoriCulture, default is: SutoriCulture.None
+	 * @returns An array of option elements.
+	 */
+	GetOptions(culture?: SutoriCulture) : Array<SutoriElementOption> {
+		return this.GetElements(culture, SutoriElementOption);
+	}
+
+
+	/**
+	 * Get an array of image elements.
+	 * @param culture The SutoriCulture, default is: SutoriCulture.None
+	 * @returns An array of image elements.
+	 */
+	GetImages(culture?: SutoriCulture) : Array<SutoriElementImage> {
+		return this.GetElements(culture, SutoriElementImage);
+	}
+
+
+	/**
+	 * Get an array of audio elements.
+	 * @param culture The SutoriCulture, default is: SutoriCulture.None
+	 * @returns An array of audio elements.
+	 */
+	GetAudio(culture?: SutoriCulture) : Array<SutoriElementImage> {
+		return this.GetElements(culture, SutoriElementAudio);
+	}
+
+
+	/**
+	 * Get an array of video elements.
+	 * @param culture The SutoriCulture, default is: SutoriCulture.None
+	 * @returns An array of video elements.
+	 */
+	GetVideos(culture?: SutoriCulture) : Array<SutoriElementImage> {
+		return this.GetElements(culture, SutoriElementVideo);
+	}
 }
