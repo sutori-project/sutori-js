@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<document xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	<!-- include>example1_data3.xml</include -->
+	<resources>
+		<image id="background-1" src="image/background1.png" />
+		<image id="player-avatar" src="images/player.png" />
+	</resources>
+	<actors>
+		<actor id="player" name="The Player">
+			<image for="avatar" resource="player-avatar" />
+		</actor>
+	</actors>
+	<moments>
+
+		<moment>
+			<text data-example="test">Hi there!</text>
+		</moment>
+
+		<moment data-example="another test" clear="false">
+			<text>This is a demonstration showing how sutori-js works!</text>
+		</moment>
+
+		<moment id="test" actor="player">
+			<text>Which door do you want to open?</text>
+			<option target="door1">Door 1</option>
+			<option target="door2">Door 2</option>
+			<text lang="fr-FR">Quelle porte voulez-vous ouvrir?</text>
+			<option lang="fr-FR" target="door1">Porte 1</option>
+			<option lang="fr-FR" target="door2">Porte 2</option>
+			<image resource="background-1" for="background" />
+		</moment>
+
+		<moment id="door1" clear="true" goto="end">
+			<text>You picked door1</text>
+		</moment>
+
+		<moment id="door2" clear="true" goto="end">
+			<text>You picked door2</text>
+		</moment>
+
+		<moment id="end">
+			<text>This is the end</text>
+		</moment>
+	</moments>
+</document>

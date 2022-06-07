@@ -5,6 +5,11 @@ class SutoriDocument {
 	/**
 	 * An array of actors.
 	 */
+	readonly Resources: Array<SutoriResource>;
+
+	/**
+	 * An array of actors.
+	 */
 	readonly Actors: Array<SutoriActor>;
 
 	/**
@@ -24,6 +29,7 @@ class SutoriDocument {
 
 	
 	constructor() {
+		this.Resources = new Array<SutoriResource>();
 		this.Actors = new Array<SutoriActor>();
 		this.Moments = new Array<SutoriMoment>();
 		this.Includes = new Array<SutoriInclude>();
@@ -85,6 +91,12 @@ class SutoriDocument {
 			}
 		}
 
+		xml.querySelectorAll('resources > *').forEach((resource_e: HTMLElement) => {
+			if (resource_e.tagName == 'image') {
+				self.Resources.push(SutoriResourceImage.Parse(resource_e));
+			}
+		});
+
 		xml.querySelectorAll('actors actor').forEach((actor_e: HTMLElement) => {
 			self.Actors.push(SutoriActor.Parse(actor_e));
 		});
@@ -100,11 +112,15 @@ class SutoriDocument {
 				moment.Goto = moment_e.attributes['goto'].textContent;
 			}
 
+			if (moment_e.hasAttribute('actor')) {
+				moment.Actor = moment_e.attributes['actor'].textContent;
+			}
+
 			if (moment_e.hasAttribute('clear')) {
 				moment.Clear = SutoriTools.ParseBool(moment_e.attributes['clear'].textContent);
 			}
 
-			self.AddMomentAttributes(moment, moment_e, ['id', 'goto', 'clear']);
+			self.AddMomentAttributes(moment, moment_e, ['id', 'goto', 'actor', 'clear']);
 
 			moment_e.querySelectorAll(':scope > *').forEach(async (element_e: HTMLElement) => {
 				switch (element_e.tagName) {
@@ -164,19 +180,11 @@ class SutoriDocument {
 
 
 	/**
-	 * Add an actor instance to this document.
-	 * @param actor The actor instance.
+	 * Get a resource by it's id.
+	 * @param id 
+	 * @returns Either the found resource or undefined.
 	 */
-	AddActor(actor: SutoriActor) {
-		this.Actors.push(actor);
-	}
-
-
-	/**
-	 * Add a moment instance to this document.
-	 * @param moment The moment instance.
-	 */
-	AddMoment(moment: SutoriMoment) {
-		this.Moments.push(moment);
+	GetResourceByID(id: string) : SutoriResource {
+		return this.Resources.find(res => res.ID == id);
 	}
 }

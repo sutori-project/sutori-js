@@ -3,6 +3,11 @@
  */
 class SutoriMoment {
 	/**
+	 * The associated actor id.
+	 */
+	Actor?: string;
+
+	/**
 	 * This moments attributes.
 	 */
 	Attributes: Object;
@@ -55,13 +60,13 @@ class SutoriMoment {
 	/**
 	 * Add an image element to this moment.
 	 * @param culture The culture of the element.
-	 * @param src The associated file src.
+	 * @param resource The associated resource id.
 	 * @returns The added element.
 	 */
-	AddImage(culture: SutoriCulture, src: string) : SutoriElementImage {
+	AddImage(culture: SutoriCulture, resource: string) : SutoriElementImage {
 		const element = new SutoriElementImage();
 		element.ContentCulture = culture;
-		element.Src = src; 
+		element.ResourceID = resource; 
 		this.Elements.push(element);
 		return element;
 	}
@@ -144,8 +149,23 @@ class SutoriMoment {
 	 * @param culture The SutoriCulture, default is: SutoriCulture.None
 	 * @returns An array of text elements.
 	 */
-	GetText(culture?: SutoriCulture) : Array<SutoriElementText> {
+	GetTexts(culture?: SutoriCulture) : Array<SutoriElementText> {
 		return this.GetElements(culture, SutoriElementText);
+	}
+
+
+	/**
+	 * Get the concatenated text.
+	 * @param culture The SutoriCulture, default is: SutoriCulture.None
+	 * @returns 
+	 */
+	GetText(culture?: SutoriCulture) : string {
+		const texts = this.GetTexts(culture);
+		let text = '';
+		for (var j=0; j<texts.length; j++) {
+			text += texts[j].Text;
+		}
+		return text;
 	}
 
 
@@ -174,7 +194,7 @@ class SutoriMoment {
 	 * @param culture The SutoriCulture, default is: SutoriCulture.None
 	 * @returns An array of audio elements.
 	 */
-	GetAudio(culture?: SutoriCulture) : Array<SutoriElementImage> {
+	GetAudio(culture?: SutoriCulture) : Array<SutoriElementAudio> {
 		return this.GetElements(culture, SutoriElementAudio);
 	}
 
@@ -184,7 +204,19 @@ class SutoriMoment {
 	 * @param culture The SutoriCulture, default is: SutoriCulture.None
 	 * @returns An array of video elements.
 	 */
-	GetVideos(culture?: SutoriCulture) : Array<SutoriElementImage> {
+	GetVideos(culture?: SutoriCulture) : Array<SutoriElementVideo> {
 		return this.GetElements(culture, SutoriElementVideo);
 	}
+
+
+	/**
+    * Try to get an associated actor for this element. 
+    * @param document The owner document.
+    */
+	FindAssociatedActor(document :SutoriDocument) : SutoriActor {
+		// return null if no actor attribute is set.
+		if (this.Actor == null) return null;
+		// find the actor.
+		return document.Actors.find(t => t.ID == this.Actor);
+   }
 }

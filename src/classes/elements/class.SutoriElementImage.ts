@@ -13,14 +13,9 @@ class SutoriElementImage extends SutoriElement {
 	For?: string;
 
 	/**
-	 * Weather or not to preload this image.
+	 * The resource id for the image data.
 	 */
-	Preload: boolean;
-
-	/**
-	 * The image file uri.
-	 */
-	Src: string;
+	ResourceID?: string;
 
 
 	constructor() {
@@ -31,11 +26,14 @@ class SutoriElementImage extends SutoriElement {
 
 	static Parse(element: HTMLElement) {
 		const result = new SutoriElementImage();
-		result.Src = element.textContent;
-		result.ParseExtraAttributes(element, ['actor', 'purpose', 'lang', 'preload']);
+		result.ParseExtraAttributes(element, ['actor', 'resource', 'purpose', 'lang']);
 
 		if (element.hasAttribute('actor')) {
 			result.Actor = element.attributes['actor'].textContent;
+		}
+
+		if (element.hasAttribute('resource')) {
+			result.ResourceID = element.attributes['resource'].textContent;
 		}
 
 		if (element.hasAttribute('for')) {
@@ -45,18 +43,6 @@ class SutoriElementImage extends SutoriElement {
 		if (element.hasAttribute('lang')) {
 			const lang = element.attributes['lang'].textContent;
 			result.ContentCulture = SutoriTools.ParseCulture(lang);
-		}
-
-		if (element.hasAttribute('preload')) {
-			const preload = SutoriTools.ParseBool(element.attributes['preload'].textContent);
-			result.Preload = preload;
-			if (preload === true) {
-				const img = new Image();
-				img.src == result.Src;
-			}
-		}
-		else {
-			result.Preload = false;
 		}
 
 		return result;

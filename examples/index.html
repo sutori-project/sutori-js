@@ -18,7 +18,7 @@
 		document.addEventListener("DOMContentLoaded", async function() {
 			
 			// load in a document.
-			const doc = await SutoriDocument.LoadXml("example1_data.xml");
+			const doc = window.doc = await SutoriDocument.LoadXml("example1.xml");
 			
 			// create a server engine.
 			const engine = window.sutori = new SutoriEngine(doc);
@@ -46,22 +46,22 @@
 				}
 
 				// add images.
-				event.GetImages(culture).forEach(imageElement => {
+				/* event.GetImages(culture).forEach(imageElement => {
 					const img = document.createElement('img');
 					img.src = imageElement.Src;
 					dialog.appendChild(img); 
-				});
+				}); */
 
 				// add text.
-				event.GetText(culture).forEach(textElement => {
-					const actor = textElement.GetAssociatedActor(doc);
+				const actor = event.Moment.FindAssociatedActor(doc);
+				event.Moment.GetTexts(culture).forEach(textElement => {
 					const p = document.createElement('p');
 					p.textContent = (actor ? actor.Name + ": " : '') + textElement.Text;
 					dialog.appendChild(p);
 				});
 
 				// add options.
-				const options = event.GetOptions(culture);
+				const options = event.Moment.GetOptions(culture);
 				options.forEach(optionElement => {
 					const btn = document.createElement('button');
 					btn.textContent = optionElement.Text;
