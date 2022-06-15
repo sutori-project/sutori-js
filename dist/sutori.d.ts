@@ -70,7 +70,7 @@ declare class SutoriDocument {
     /**
      * Get a resource by it's id.
      * @param id
-     * @returns
+     * @returns Either the found resource or undefined.
      */
     GetResourceByID(id: string): SutoriResource;
 }
@@ -210,6 +210,12 @@ declare class SutoriMoment {
      */
     GetElements(culture?: SutoriCulture, type?: any): any[];
     /**
+     * Remove all elements that have the same culture and type.
+     * @param culture
+     * @param type
+     */
+    RemoveElements(culture?: SutoriCulture, type?: any): void;
+    /**
      * Get an array of text elements.
      * @param culture The SutoriCulture, default is: SutoriCulture.None
      * @returns An array of text elements.
@@ -238,13 +244,25 @@ declare class SutoriMoment {
      * @param culture The SutoriCulture, default is: SutoriCulture.None
      * @returns An array of audio elements.
      */
-    GetAudio(culture?: SutoriCulture): Array<SutoriElementImage>;
+    GetAudio(culture?: SutoriCulture): Array<SutoriElementAudio>;
     /**
      * Get an array of video elements.
      * @param culture The SutoriCulture, default is: SutoriCulture.None
      * @returns An array of video elements.
      */
-    GetVideos(culture?: SutoriCulture): Array<SutoriElementImage>;
+    GetVideos(culture?: SutoriCulture): Array<SutoriElementVideo>;
+    /**
+     * Get an array of setter elements.
+     * @param culture The SutoriCulture, default is: SutoriCulture.None
+     * @returns An array of video elements.
+     */
+    GetSetters(culture?: SutoriCulture): Array<SutoriElementSet>;
+    /**
+     * Get an array of trigger elements.
+     * @param culture The SutoriCulture, default is: SutoriCulture.None
+     * @returns An array of video elements.
+     */
+    GetTriggers(culture?: SutoriCulture): Array<SutoriElementTrigger>;
     /**
     * Try to get an associated actor for this element.
     * @param document The owner document.
@@ -432,7 +450,7 @@ declare class SutoriElementVideo extends SutoriElement {
     GetAssociatedActor(document: SutoriDocument): SutoriActor;
 }
 /**
- *
+ * Describes an image resource.
  */
 declare class SutoriResourceImage extends SutoriResource {
     /**

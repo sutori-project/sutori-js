@@ -135,12 +135,27 @@ class SutoriMoment {
 	 * @param type The type of element to return, for example SutoriElementText
 	 * @returns An array of the type requested.
 	 */
-	 GetElements(culture?: SutoriCulture, type?: any) {
+	GetElements(culture?: SutoriCulture, type?: any) {
 		const self = this;
 		const elements = typeof culture == 'undefined'
 						 ? self.Elements.filter(e => e instanceof type)
 						 : self.Elements.filter(e => e instanceof type && (e.ContentCulture == culture || e.ContentCulture == SutoriCulture.All));
 		return elements as Array<typeof type>;
+	}
+
+
+	/**
+	 * Remove all elements that have the same culture and type.
+	 * @param culture 
+	 * @param type 
+	 */
+	RemoveElements(culture?: SutoriCulture, type?: any) {
+		const self = this;
+		const elements = self.GetElements(culture, type);
+		for (var i=0; i<elements.length; i++) {
+			const index = self.Elements.indexOf(elements[i]);
+			self.Elements.splice(index, 1);
+		}
 	}
 
 
@@ -206,6 +221,26 @@ class SutoriMoment {
 	 */
 	GetVideos(culture?: SutoriCulture) : Array<SutoriElementVideo> {
 		return this.GetElements(culture, SutoriElementVideo);
+	}
+
+
+	/**
+	 * Get an array of setter elements.
+	 * @param culture The SutoriCulture, default is: SutoriCulture.None
+	 * @returns An array of video elements.
+	 */
+	 GetSetters(culture?: SutoriCulture) : Array<SutoriElementSet> {
+		return this.GetElements(culture, SutoriElementSet);
+	}
+
+
+	/**
+	 * Get an array of trigger elements.
+	 * @param culture The SutoriCulture, default is: SutoriCulture.None
+	 * @returns An array of video elements.
+	 */
+	 GetTriggers(culture?: SutoriCulture) : Array<SutoriElementTrigger> {
+		return this.GetElements(culture, SutoriElementTrigger);
 	}
 
 
