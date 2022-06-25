@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <document xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	<properties>
+		<width>800</width>
+		<height>600</height>
+		<title>Example Game</title>
+	</properties>
 	<!-- include>example1_data3.xml</include -->
 	<resources>
 		<image id="background-1" src="image/background1.png" />

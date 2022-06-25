@@ -3,6 +3,10 @@
  */
 class SutoriDocument {
 	/**
+	 * Arbitrary properties associated with this document.
+	 */
+	readonly Properties: Map<string, string>;
+	/**
 	 * An array of actors.
 	 */
 	readonly Resources: Array<SutoriResource>;
@@ -29,6 +33,7 @@ class SutoriDocument {
 
 	
 	constructor() {
+		this.Properties = new Map();
 		this.Resources = new Array<SutoriResource>();
 		this.Actors = new Array<SutoriActor>();
 		this.Moments = new Array<SutoriMoment>();
@@ -80,8 +85,11 @@ class SutoriDocument {
 		const xml = xml_parser.parseFromString(raw_xml, "text/xml");
 		const self = this;
 
-		const includeElements = xml.querySelectorAll('include');
+		xml.querySelectorAll('properties > *').forEach((property_e: HTMLElement) => {
+			self.Properties.set(property_e.tagName, property_e.textContent);
+		});
 
+		const includeElements = xml.querySelectorAll('include');
 		for (let i=0; i<includeElements.length; i++) {
 			const includeElement = includeElements[i];
 			const include = SutoriInclude.Parse(includeElement as HTMLElement);
@@ -186,5 +194,131 @@ class SutoriDocument {
 	 */
 	GetResourceByID(id: string) : SutoriResource {
 		return this.Resources.find(res => res.ID == id);
+	}
+
+
+	/**
+	 * Serialize the loaded document into an xml.
+	 * @param doc The destination document.
+	 */
+	private SerializeToXml() : string {
+		const doc = document.implementation.createDocument(null, 'document');
+		const self = this;
+		const root = doc.childNodes[0];
+
+		// serialize properties.
+		if (self.Properties.size > 0) {
+			const props = root.appendChild(doc.createElement('properties')) as HTMLElement;
+			self.Properties.forEach((value: string, key: string) => {
+				const prop = props.appendChild(doc.createElement(key));
+				prop.textContent = value;
+			});
+		}
+		
+		// serialize includes.
+		for (var i=0; i<self.Includes.length; i++) {
+			const includeElement = root.appendChild(doc.createElement('include')) as HTMLElement;
+			includeElement.textContent = self.Includes[i].Path;
+			if (self.Includes[i].After) {
+				includeElement.setAttribute('after', 'true');
+			}
+		}
+
+		// serialize the resources.
+		const resources = root.appendChild(doc.createElement('resources')) as HTMLElement;
+		for (var i=0; i<self.Resources.length; i++) {
+			const resource = self.Resources[i];
+			if (resource instanceof SutoriResourceImage) {
+				const resourceElement = resources.appendChild(doc.createElement('image')) as HTMLElement;
+				if (!SutoriTools.IsEmptyString(resource.ID)) resourceElement.setAttribute('id', resource.ID);
+				if (!SutoriTools.IsEmptyString(resource.Name)) resourceElement.setAttribute('name', resource.Name);
+				if (!SutoriTools.IsEmptyString(resource.Src)) resourceElement.setAttribute('src', resource.Src);
+				if (resource.Preload === true) resourceElement.setAttribute('preload', 'true');
+				// apply the attributes.
+				for (const [key, value] of Object.entries(resource.Attributes)) {
+					resourceElement.setAttribute(key, value);
+				}
+			}
+		}
+
+		// serialize the actors.
+		const actors = root.appendChild(doc.createElement('actors')) as HTMLElement;
+		for (var i=0; i<self.Actors.length; i++) {
+			const actor = self.Actors[i];
+			const actorElement = actors.appendChild(doc.createElement('actor')) as HTMLElement;
+			if (!SutoriTools.IsEmptyString(actor.ID)) actorElement.setAttribute('id', actor.ID);
+			actorElement.setAttribute('name', actor.Name);
+			// apply the attributes.
+			for (const [key, value] of Object.entries(actor.Attributes)) {
+				actorElement.setAttribute(key, value as string);
+			}
+		}
+
+		// serialize moments.
+		const moments = root.appendChild(doc.createElement('moments')) as HTMLElement;
+		for (var i=0; i<self.Moments.length; i++) {
+			const moment = self.Moments[i];
+			const momentElement = moments.appendChild(doc.createElement('moment')) as HTMLElement;
+
+			// moment attributes.
+			if (moment.Clear === true) momentElement.setAttribute('clear', 'true');
+			if (!SutoriTools.IsEmptyString(moment.ID)) momentElement.setAttribute('id', moment.ID);
+			if (!SutoriTools.IsEmptyString(moment.Actor)) momentElement.setAttribute('actor', moment.Actor);
+			if (!SutoriTools.IsEmptyString(moment.Goto)) momentElement.setAttribute('goto', moment.Goto);
+			// apply the attributes.
+			for (const [key, value] of Object.entries(moment.Attributes)) {
+				momentElement.setAttribute(key, value as string);
+			}
+
+			// serialize the elements.
+			for (var j=0; j<moment.Elements.length;j++) {
+				const element = moment.Elements[j];
+
+				if (element instanceof SutoriElementText)
+				{
+					const text = element as SutoriElementText;
+					const te = momentElement.appendChild(doc.createElement('text')) as HTMLElement;
+					te.textContent = text.Text;
+					if (text.ContentCulture !== SutoriCulture.None) te.setAttribute('lang', text.ContentCulture);
+				}
+				else if (element instanceof SutoriElementOption)
+				{
+					const option = element as SutoriElementOption;
+					const oe = momentElement.appendChild(doc.createElement('option')) as HTMLElement;
+					oe.textContent = option.Text;
+					if (option.ContentCulture !== SutoriCulture.None) oe.setAttribute('lang', option.ContentCulture);
+					if (option.Solver !== SutoriSolver.None) oe.setAttribute('solver', option.Solver);
+					if (!SutoriTools.IsEmptyString(option.Target)) oe.setAttribute('target', option.Target);
+					if (!SutoriTools.IsEmptyString(option.SolverCallback)) oe.setAttribute('solver', option.SolverCallback);
+				}
+				else if (element instanceof SutoriElementImage)
+				{
+					const image = element as SutoriElementImage;
+					const ie = momentElement.appendChild(doc.createElement('image')) as HTMLElement;
+					if (image.ContentCulture !== SutoriCulture.None) ie.setAttribute('lang', image.ContentCulture);
+					if (!SutoriTools.IsEmptyString(image.ResourceID)) ie.setAttribute('resource', image.ResourceID);
+					if (!SutoriTools.IsEmptyString(image.Actor)) ie.setAttribute('actor', image.Actor);
+					if (!SutoriTools.IsEmptyString(image.For)) ie.setAttribute('for', image.For);
+				}
+				else if (element instanceof SutoriElementSet)
+				{
+					const setter = element as SutoriElementSet;
+					const se = momentElement.appendChild(doc.createElement('set')) as HTMLElement;
+					if (setter.ContentCulture !== SutoriCulture.None) se.setAttribute('lang', setter.ContentCulture);
+					if (!SutoriTools.IsEmptyString(setter.Name)) se.setAttribute('name', setter.Name);
+					se.textContent = setter.Value;
+				}
+				else if (element instanceof SutoriElementTrigger)
+				{
+					const trigger = element as SutoriElementTrigger;
+					const te = momentElement.appendChild(doc.createElement('trigger')) as HTMLElement;
+					if (trigger.ContentCulture !== SutoriCulture.None) te.setAttribute('lang', trigger.ContentCulture);
+					if (!SutoriTools.IsEmptyString(trigger.Action)) te.setAttribute('action', trigger.Action);
+					te.textContent = trigger.Body;
+				}
+			}
+		}
+
+		return SutoriTools.StringifyXml(doc);
 	}
 }
