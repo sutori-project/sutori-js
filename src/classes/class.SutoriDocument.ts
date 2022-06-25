@@ -201,7 +201,7 @@ class SutoriDocument {
 	 * Serialize the loaded document into an xml.
 	 * @param doc The destination document.
 	 */
-	private SerializeToXml() : string {
+	SerializeToXml() : string {
 		const doc = document.implementation.createDocument(null, 'document');
 		const self = this;
 		const root = doc.childNodes[0];

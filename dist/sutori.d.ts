@@ -81,7 +81,7 @@ declare class SutoriDocument {
      * Serialize the loaded document into an xml.
      * @param doc The destination document.
      */
-    private SerializeToXml;
+    SerializeToXml(): string;
 }
 /**
  * The base class for all moment elements.
