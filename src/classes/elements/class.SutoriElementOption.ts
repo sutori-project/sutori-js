@@ -34,9 +34,10 @@ class SutoriElementOption extends SutoriElement {
     
 	static Parse(element: HTMLElement) {
 		const result = new SutoriElementOption();
-		const element_ex = element as HTMLElementEx;
+		const element_ex = new HTMLElementEx(element);
 		result.ParseExtraAttributes(element, ['lang', 'target', 'solver', 'solver_callback']);
 		result.Text = element.textContent;
+		result.ContentCulture = element_ex.readAttributeCulture('lang');
 		result.Target = element_ex.readAttribute('target');
 		result.Solver = element_ex.readAttributeSolver('solver');
 		result.SolverCallback = element_ex.readAttribute('solver_callback');

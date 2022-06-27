@@ -1,11 +1,11 @@
 {
 	"name": "sutori-js",
-	"version": "0.0.1",
-	"homepage": "https://github.com/kodaloid/sutori-js",
+	"version": "0.0.6",
+	"homepage": "https://github.com/sutori-project/sutori-js",
 	"authors": ["Steve Bailey (kodaloid) <steve@kodaloid.com>"],
-	"description": "A Challenge Response Sequencer for building interlinking chains of multimedia.",
+	"description": "A simple to use dialog system for websites, apps, games and more.",
 	"main": "dist/sutori-js.min.js",
-	"keywords": ["js", "sequencer", "framework"],
+	"keywords": ["js", "dialog", "sequencer", "framework"],
 	"license": "MIT",
 	"ignore": [
 	  "**/.*"

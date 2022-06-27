@@ -22,7 +22,7 @@ class SutoriElementTrigger extends SutoriElement {
 
 	static Parse(element: HTMLElement) {
 		const result = new SutoriElementTrigger();
-		const element_ex = element as HTMLElementEx;
+		const element_ex = new HTMLElementEx(element);
 		result.ParseExtraAttributes(element, ['action']);
 		result.Body = element.textContent;
 		result.Action = element_ex.readAttribute('action');

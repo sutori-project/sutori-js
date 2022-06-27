@@ -18,18 +18,13 @@
 		document.addEventListener("DOMContentLoaded", async function() {
 			
 			// load in a document.
-			const doc = window.doc = await SutoriDocument.LoadXml("example1.xml");
+			const doc = window.doc = await SutoriDocument.LoadXmlFile("example1.xml");
 			
 			// create a server engine.
 			const engine = window.sutori = new SutoriEngine(doc);
 			
 			// record which culture we wish to use when displaying multimedia. 
 			const culture = SutoriCulture.None;
-
-			// example of how to add another moment in code.
-			// const extraMoment = new SutoriMoment();
-			// extraMoment.AddText(culture, "This is a bonus moment!");
-			// doc.AddMoment(extraMoment);
 			
 			// handle what happens when the server challenges for a response.
 			engine.HandleChallenge = function(event) {

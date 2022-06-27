@@ -26,7 +26,7 @@ class SutoriElementAudio extends SutoriElement {
 
 	static Parse(element: HTMLElement) {
 		const result = new SutoriElementAudio();
-		const element_ex = element as HTMLElementEx;
+		const element_ex = new HTMLElementEx(element);
 		result.ParseExtraAttributes(element, ['actor', 'for', 'resource', 'lang']);
 		result.Actor = element_ex.readAttribute('actor');
 		result.For = element_ex.readAttribute('for');

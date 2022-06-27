@@ -1,33 +1,31 @@
-class HTMLElementEx extends HTMLElement {
-    readAttribute(attributeName, defaultValue) {
-        const element = this;
-        if (!element.hasAttribute(attributeName))
-            return defaultValue;
-        return element.attributes[attributeName].textContent;
+class HTMLElementEx {
+    constructor(original) {
+        this.Element = original;
     }
-    readAttributeInt(attributeName, defaultValue) {
-        const element = this;
-        if (!element.hasAttribute(attributeName))
+    readAttribute(attributeName, defaultValue = null) {
+        if (!this.Element.hasAttribute(attributeName))
             return defaultValue;
-        return parseInt(element.attributes[attributeName].textContent);
+        return this.Element.attributes[attributeName].textContent;
     }
-    readAttributeBool(attributeName, defaultValue) {
-        const element = this;
-        if (!element.hasAttribute(attributeName))
+    readAttributeInt(attributeName, defaultValue = null) {
+        if (!this.Element.hasAttribute(attributeName))
             return defaultValue;
-        return SutoriTools.ParseBool(element.attributes[attributeName].textContent);
+        return parseInt(this.Element.attributes[attributeName].textContent);
+    }
+    readAttributeBool(attributeName, defaultValue = null) {
+        if (!this.Element.hasAttribute(attributeName))
+            return defaultValue;
+        return SutoriTools.ParseBool(this.Element.attributes[attributeName].textContent);
     }
     readAttributeCulture(attributeName) {
-        const element = this;
-        if (!element.hasAttribute(attributeName))
+        if (!this.Element.hasAttribute(attributeName))
             return SutoriCulture.None;
-        return SutoriTools.ParseCulture(element.attributes[attributeName].textContent);
+        return SutoriTools.ParseCulture(this.Element.attributes[attributeName].textContent);
     }
     readAttributeSolver(attributeName) {
-        const element = this;
-        if (!element.hasAttribute(attributeName))
+        if (!this.Element.hasAttribute(attributeName))
             return SutoriSolver.None;
-        return SutoriTools.ParseSolver(element.attributes[attributeName].textContent);
+        return SutoriTools.ParseSolver(this.Element.attributes[attributeName].textContent);
     }
 }
 /**
@@ -43,7 +41,7 @@ class SutoriActor {
     }
     static Parse(actor_e) {
         const result = new SutoriActor();
-        const actor_ex = actor_e;
+        const actor_ex = new HTMLElementEx(actor_e);
         result.ParseExtraAttributes(actor_e, ['id', 'name', 'lang']);
         result.ID = actor_ex.readAttribute('id');
         result.Name = actor_ex.readAttribute('name');
@@ -164,12 +162,12 @@ class SutoriDocument {
         });
         xml.querySelectorAll('moments moment').forEach((moment_e) => {
             const moment = new SutoriMoment();
-            const moment_ex = moment_e;
+            const moment_ex = new HTMLElementEx(moment_e);
             self.AddMomentAttributes(moment, moment_e, ['id', 'goto', 'actor', 'clear']);
             moment.ID = moment_ex.readAttribute('id');
             moment.Goto = moment_ex.readAttribute('goto');
             moment.Actor = moment_ex.readAttribute('actor');
-            moment.Clear = moment_ex.readAttributeBool('clear');
+            moment.Clear = moment_ex.readAttributeBool('clear', false);
             moment_e.querySelectorAll(':scope > *').forEach(async (element_e) => {
                 switch (element_e.tagName) {
                     case 'text':
@@ -439,13 +437,14 @@ class SutoriEngine {
      */
     GotoNextMoment() {
         const self = this;
+        console.log('Goto next moment.');
         if (self.Cursor == null)
             return false; // no cursor present.
         const index = self.Document.Moments.indexOf(self.Cursor);
         if (index == -1)
             return false; // cursor doesn't belong to document.
         // if the moment has a goto, use that instead.
-        if (self.Cursor.Goto != '') {
+        if (!SutoriTools.IsEmptyString(self.Cursor.Goto)) {
             self.GotoMomentID(self.Cursor.Goto);
             return false;
         }
@@ -718,7 +717,7 @@ class SutoriElementAudio extends SutoriElement {
     }
     static Parse(element) {
         const result = new SutoriElementAudio();
-        const element_ex = element;
+        const element_ex = new HTMLElementEx(element);
         result.ParseExtraAttributes(element, ['actor', 'for', 'resource', 'lang']);
         result.Actor = element_ex.readAttribute('actor');
         result.For = element_ex.readAttribute('for');
@@ -748,7 +747,7 @@ class SutoriElementImage extends SutoriElement {
     }
     static Parse(element) {
         const result = new SutoriElementImage();
-        const element_ex = element;
+        const element_ex = new HTMLElementEx(element);
         result.ParseExtraAttributes(element, ['actor', 'for', 'resource', 'lang']);
         result.Actor = element_ex.readAttribute('actor');
         result.For = element_ex.readAttribute('for');
@@ -797,9 +796,10 @@ class SutoriElementOption extends SutoriElement {
     }
     static Parse(element) {
         const result = new SutoriElementOption();
-        const element_ex = element;
+        const element_ex = new HTMLElementEx(element);
         result.ParseExtraAttributes(element, ['lang', 'target', 'solver', 'solver_callback']);
         result.Text = element.textContent;
+        result.ContentCulture = element_ex.readAttributeCulture('lang');
         result.Target = element_ex.readAttribute('target');
         result.Solver = element_ex.readAttributeSolver('solver');
         result.SolverCallback = element_ex.readAttribute('solver_callback');
@@ -817,7 +817,7 @@ class SutoriElementSet extends SutoriElement {
     }
     static Parse(element) {
         const result = new SutoriElementSet();
-        const element_ex = element;
+        const element_ex = new HTMLElementEx(element);
         result.ParseExtraAttributes(element, ['name']);
         result.Name = element_ex.readAttribute('name');
         result.Value = element.textContent;
@@ -834,7 +834,7 @@ class SutoriElementText extends SutoriElement {
     }
     static Parse(element) {
         const result = new SutoriElementText();
-        const element_ex = element;
+        const element_ex = new HTMLElementEx(element);
         result.ParseExtraAttributes(element, ['lang']);
         result.Text = element.textContent;
         result.ContentCulture = element_ex.readAttributeCulture('lang');
@@ -852,7 +852,7 @@ class SutoriElementTrigger extends SutoriElement {
     }
     static Parse(element) {
         const result = new SutoriElementTrigger();
-        const element_ex = element;
+        const element_ex = new HTMLElementEx(element);
         result.ParseExtraAttributes(element, ['action']);
         result.Body = element.textContent;
         result.Action = element_ex.readAttribute('action');
@@ -869,7 +869,7 @@ class SutoriElementVideo extends SutoriElement {
     }
     static Parse(element) {
         const result = new SutoriElementVideo();
-        const element_ex = element;
+        const element_ex = new HTMLElementEx(element);
         result.ParseExtraAttributes(element, ['actor', 'for', 'resource', 'lang']);
         result.Actor = element_ex.readAttribute('actor');
         result.For = element_ex.readAttribute('for');
@@ -901,12 +901,12 @@ class SutoriResourceImage extends SutoriResource {
     }
     static Parse(element) {
         const result = new SutoriResourceImage();
-        const element_ex = element;
+        const element_ex = new HTMLElementEx(element);
         result.ParseExtraAttributes(element, ['id', 'name', 'src']);
         result.ID = element_ex.readAttribute('id');
         result.Name = element_ex.readAttribute('name');
         result.Src = element_ex.readAttribute('src');
-        result.Preload = element_ex.readAttributeBool('preload');
+        result.Preload = element_ex.readAttributeBool('preload', false);
         return result;
     }
 }

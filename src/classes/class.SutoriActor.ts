@@ -20,7 +20,7 @@ class SutoriActor {
 
     static Parse(actor_e: HTMLElement) {
 		const result = new SutoriActor();
-        const actor_ex = actor_e as HTMLElementEx;
+        const actor_ex = new HTMLElementEx(actor_e);
 
         result.ParseExtraAttributes(actor_e, ['id', 'name', 'lang']);
         result.ID = actor_ex.readAttribute('id');

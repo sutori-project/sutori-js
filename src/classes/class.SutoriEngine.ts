@@ -68,12 +68,13 @@ class SutoriEngine {
 	 */
 	GotoNextMoment() : boolean {
 		const self = this;
+		console.log('Goto next moment.');
 		if (self.Cursor == null) return false; // no cursor present.
 		const index = self.Document.Moments.indexOf(self.Cursor);
 		if (index == -1) return false; // cursor doesn't belong to document.
 
 		// if the moment has a goto, use that instead.
-		if (self.Cursor.Goto != '') {
+		if (!SutoriTools.IsEmptyString(self.Cursor.Goto)) {
 			self.GotoMomentID(self.Cursor.Goto);
 			return false;
 		}

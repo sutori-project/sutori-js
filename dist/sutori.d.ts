@@ -1,4 +1,6 @@
-declare class HTMLElementEx extends HTMLElement {
+declare class HTMLElementEx {
+    Element: HTMLElement;
+    constructor(original: HTMLElement);
     readAttribute(attributeName: string, defaultValue?: string): string;
     readAttributeInt(attributeName: string, defaultValue?: number): number;
     readAttributeBool(attributeName: string, defaultValue?: boolean): boolean;

@@ -47,7 +47,7 @@ class SutoriDocument {
 	 * @param uri The uri location of the XML file to load.
 	 * @returns The loaded document.
 	 */
-	static async LoadXml(uri: string) : Promise<SutoriDocument> {
+	static async LoadXmlFile(uri: string) : Promise<SutoriDocument> {
 		// create a new document.
 		const result = new SutoriDocument();
 		// load the document here.
@@ -111,13 +111,13 @@ class SutoriDocument {
 
 		xml.querySelectorAll('moments moment').forEach((moment_e: HTMLElement) => {
 			const moment = new SutoriMoment();
-			const moment_ex = moment_e as HTMLElementEx;
+			const moment_ex = new HTMLElementEx(moment_e);
 
 			self.AddMomentAttributes(moment, moment_e, ['id', 'goto', 'actor', 'clear']);
 			moment.ID = moment_ex.readAttribute('id');
 			moment.Goto = moment_ex.readAttribute('goto');
 			moment.Actor = moment_ex.readAttribute('actor');
-			moment.Clear = moment_ex.readAttributeBool('clear');
+			moment.Clear = moment_ex.readAttributeBool('clear', false);
 
 			moment_e.querySelectorAll(':scope > *').forEach(async (element_e: HTMLElement) => {
 				switch (element_e.tagName) {

@@ -1,27 +1,84 @@
-# Sutori JS 
-A Challenge Response Sequencer for building interlinking chains of multimedia.
+# sutori-js
+
+A simple to use JavaScript dialog system for websites, apps, games and more.
 
 
 
 ## Introduction
 
-Imagine you wish to ask the user a series of questions, or you wish to present
-multimedia in a specific sequence. Maybe you want to create a menu picking
-system on a website, or you wish to create a visual novel or menu component for
-a game, or perhaps you want to make a telephone switch board. Sutori provides the
-groundwork for building these sorts of things.
+Sutori is a dialog engine that enables you to add an easy to customise dialog
+abilities to nearly anything that needs them. Here are some great examples of
+use cases:
+
+- A quiz/survey on a website.
+- Custom checkout process for buying things on a web shop.
+- Conversation system in computer game.
+- Visual novel creation.
+- Telephone switch board.
+
+Dialog is written in XML files, with a structure that allows for multiple
+languages, option branches, multimedia (images, audio, video). Dialog is
+broken up into a list of moments in which the conversation can traverse.
+
+Here is an example of a basic sutori XML document:
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<document xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	<moments>
+		<moment>
+			<text>Which door do you want to open?</text>
+			<option target="door1">Door 1</option>
+			<option target="door2">Door 2</option>
+		</moment>
+
+		<moment id="door1" clear="true" goto="end">
+			<text>You picked door1</text>
+		</moment>
+
+		<moment id="door2" clear="true" goto="end">
+			<text>You picked door2</text>
+		</moment>
+
+		<moment id="end">
+			<text>This is the end</text>
+		</moment>
+	</moments>
+</document>
+```
+
+Sutori closely mimics the way [CYOA (choose your own adventure)](https://en.wikipedia.org/wiki/Gamebook)
+Gamebook's work, with the small difference is that at the end of each moment, the
+user is asked what to do next.
 
 
-For an example, check out: [https://sutori-js.kodaloid.com/](https://sutori-js.kodaloid.com/)
+
+## Sister Projects
+
+- [sutori-studio](https://github.com/sutori-project/sutori-studio) - An IDE for editing Sutori XML files.
+- [sutori-game](https://github.com/sutori-project/sutori-game) - A template for creating basic visual novels with sutori-js.
+- [sutori-cs](https://github.com/sutori-project/sutori-cs) - The .NET Standard 2.0 version of Sutori engine.
+
+
+
+## This Repo
+
+This repository is the JavaScript implementation of the Sutori dialog engine.
+It is written in TypeScript, and compiled into JavaScript. So it can be used
+anywhere that JavaScript can run.
+
+Here is an example of the engine in action: [https://sutori-js.kodaloid.com/](https://sutori-js.kodaloid.com/)
+
+This repo also contains a more up to date example: [examples/index.html](https://raw.githubusercontent.com/sutori-project/sutori-js/main/examples/index.html)
 
 
 
 ## How To Install
 
-Sutori has no external dependencies. It is written in TypeScript, however the repo
-includes pre-compiled and minified JavaScript to make things easier. So you can
-just copy [dist/sutori.min.js](https://raw.githubusercontent.com/kodaloid/sutori-js/main/dist/sutori.min.js) (right-click and save link as...) into your project folder, then reference it with a
-script tag like so:
+Sutori has no external dependencies. It is written in TypeScript, and is
+compiled into minified JavaScript files to make things easier. You can copy
+[dist/sutori.min.js](https://raw.githubusercontent.com/sutori-project/sutori-js/main/dist/sutori.min.js) (right-click and save link as...) 
+into your project folder, then reference the engine with a script tag like so:
 
 ```html
 <script src="sutori-js.min.js"></script>
@@ -35,7 +92,7 @@ Here's a bare bones example of how to setup a Sutori project:
 
 ```js
 // load in an xml document.
-const doc = await SutoriDocument.LoadXml("example1_data.xml");
+const doc = await SutoriDocument.LoadXmlFile("example1.xml");
         
 // create a prompt engine.
 const engine = new SutoriEngine(doc);
@@ -71,6 +128,7 @@ engine.GotoNextMoment();
 ```
 
 
+
 ## Creating Data
 
 Creating a document is quite simple. I recommend checking out the first example
@@ -80,7 +138,10 @@ You can also create a document from pure JavaScript like this:
 
 ```js
 const extraMoment = new SutoriMoment();
-extraMoment.AddText(culture, "This is a bonus moment!");
+const textElement = new SutoriElementText();
+textElement.ContentCulture = SutoriCulture.EnGB;
+textElement.Text = "This is a bonus moment!";
+extraMoment.AddElement(textElement);
 doc.AddMoment(extraMoment);
 ```
 
@@ -95,8 +156,7 @@ installed, then make sure you have typescript & jsmin enabled. I did this with
 these commands:
 
 ```
-npm install -g typescript
-npm install -g jsmin
+npm install -g typescript jsmin
 ```
 
 Then in the root of your project, run the following command:
