@@ -8,9 +8,14 @@ class SutoriElementAudio extends SutoriElement {
 	Actor?: string;
 
 	/**
-	 * The audio file uri.
+	 * The purpose of this image. For example; avatar, background etc...
 	 */
-	Src: string;
+	For?: string;
+ 
+	/**
+	 * The resource id for the image data.
+	 */
+	ResourceID?: string;
 
 
 	constructor() {
@@ -21,18 +26,12 @@ class SutoriElementAudio extends SutoriElement {
 
 	static Parse(element: HTMLElement) {
 		const result = new SutoriElementAudio();
-		result.Src = element.textContent;
-		result.ParseExtraAttributes(element, ['actor', 'lang']);
-
-		if (element.hasAttribute('actor')) {
-			result.Actor = element.attributes['actor'].textContent;
-		}
-
-		if (element.hasAttribute('lang')) {
-			const lang = element.attributes['lang'].textContent;
-			result.ContentCulture = SutoriTools.ParseCulture(lang);
-		}
-		
+		const element_ex = element as HTMLElementEx;
+		result.ParseExtraAttributes(element, ['actor', 'for', 'resource', 'lang']);
+		result.Actor = element_ex.readAttribute('actor');
+		result.For = element_ex.readAttribute('for');
+		result.ResourceID = element_ex.readAttribute('resource');
+		result.ContentCulture = element_ex.readAttributeCulture('lang');
 		return result;
 	}
 

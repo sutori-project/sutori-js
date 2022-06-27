@@ -5,6 +5,7 @@ class SutoriEngine {
 	private Cursor: SutoriMoment;
 	private Document: SutoriDocument;
 	public HandleChallenge: CallableFunction;
+	public HandleEnd: CallableFunction;
 
 	
 	constructor(document: SutoriDocument) {
@@ -31,19 +32,23 @@ class SutoriEngine {
 		const self = this;
 
 		if (moment == null) moment = this.Document.Moments[0];
-		if (moment == null) throw new Error("Document does not have any beads!");
+		if (moment == null) throw new Error("Document does not have any moments!");
 		this.Cursor = moment;
 
 		// execute any load elements set to encounter.
 		const loaderElements = moment.GetLoaderElements();
 		if (loaderElements && loaderElements.length > 0) {
 			for (let i=0; i<loaderElements.length; i++) {
-				await self.Document.AddDataFromXmlUri(loaderElements[i].Path);
-				loaderElements[i].Loaded = true;
+				if (loaderElements[i].Loaded == false) {
+					await self.Document.AddDataFromXmlUri(loaderElements[i].Path);
+					loaderElements[i].Loaded = true;
+				}
 			}
 		}
 
-		this.HandleChallenge(new SutoriChallengeEvent(this, moment));
+		if (typeof this.HandleChallenge !== 'undefined') {
+			this.HandleChallenge(new SutoriChallengeEvent(this, moment));
+		}
 	}
 
 
@@ -62,18 +67,24 @@ class SutoriEngine {
 	 * @returns boolean True if successful.
 	 */
 	GotoNextMoment() : boolean {
-		if (this.Cursor == null) return; // no cursor present.
-		const index = this.Document.Moments.indexOf(this.Cursor);
+		const self = this;
+		if (self.Cursor == null) return false; // no cursor present.
+		const index = self.Document.Moments.indexOf(self.Cursor);
 		if (index == -1) return false; // cursor doesn't belong to document.
 
 		// if the moment has a goto, use that instead.
-		if (this.Cursor.Goto != '') {
-			this.GotoMomentID(this.Cursor.Goto);
+		if (self.Cursor.Goto != '') {
+			self.GotoMomentID(self.Cursor.Goto);
 			return false;
 		}
 
-		if (index == this.Document.Moments.length - 1) return false; // end of sequence.
-		this.GotoMoment(this.Document.Moments[index + 1]);
+		if (index == self.Document.Moments.length - 1) {
+			if (typeof self.HandleEnd !== 'undefined') {
+				self.HandleEnd();
+			}
+			return false; // end of sequence.
+		}
+		self.GotoMoment(self.Document.Moments[index + 1]);
 		return true;
 	}
 }

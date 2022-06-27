@@ -22,13 +22,10 @@ class SutoriElementSet extends SutoriElement {
 
 	static Parse(element: HTMLElement) {
 		const result = new SutoriElementSet();
-		result.Value = element.textContent;
+		const element_ex = element as HTMLElementEx;
 		result.ParseExtraAttributes(element, ['name']);
-
-		if (element.hasAttribute('name')) {
-			result.Name = element.attributes['name'].textContent;
-		}
-
+		result.Name = element_ex.readAttribute('name');
+		result.Value = element.textContent;
 		return result;
 	}
 }

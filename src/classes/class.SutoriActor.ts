@@ -20,26 +20,12 @@ class SutoriActor {
 
     static Parse(actor_e: HTMLElement) {
 		const result = new SutoriActor();
+        const actor_ex = actor_e as HTMLElementEx;
 
-        if (actor_e.hasAttribute('id')) {
-			result.ID = actor_e.attributes['id'].textContent;
-		}
-
-        if (actor_e.hasAttribute('name')) {
-			result.Name = actor_e.attributes['name'].textContent;
-		}
-
-		if (actor_e.hasAttribute('lang')) {
-			const lang = actor_e.attributes['lang'].textContent;
-			result.ContentCulture = SutoriTools.ParseCulture(lang);
-		}
-
-        const exclude = ['id', 'name', 'lang'];
-        for (let i=0; i<actor_e.attributes.length; i++) {
-            const attr = actor_e.attributes[i];
-            if (typeof exclude !== 'undefined' && exclude.indexOf(attr.name) > -1) continue;
-            result.Attributes[attr.name] = attr.value;
-        }
+        result.ParseExtraAttributes(actor_e, ['id', 'name', 'lang']);
+        result.ID = actor_ex.readAttribute('id');
+        result.Name = actor_ex.readAttribute('name');
+        result.ContentCulture = actor_ex.readAttributeCulture('lang');
 
         actor_e.querySelectorAll(':scope > *').forEach(async (element_e: HTMLElement) => {
             switch (element_e.tagName) {
@@ -60,4 +46,20 @@ class SutoriActor {
 
 		return result;
 	}
+
+
+    /**
+     * Parse extra attributes when parsing an element.
+     * @param element The source element.
+     * @param exclude An array of keys to exclude.
+     */
+     protected ParseExtraAttributes(element: HTMLElement, exclude?: Array<string>) {
+        const self = this;
+        self.Attributes = new Object;
+        for (let i=0; i<element.attributes.length; i++) {
+            const attr = element.attributes[i];
+            if (typeof exclude !== 'undefined' && exclude.indexOf(attr.name) > -1) continue;
+            self.Attributes[attr.name] = attr.value;
+        }
+    }
 }

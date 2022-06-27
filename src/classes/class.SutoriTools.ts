@@ -38,7 +38,6 @@ class SutoriTools {
 	}
 
 
-
 	/**
 	 * Test weather a string is empty.
 	 * @param text 

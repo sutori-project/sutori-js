@@ -16,14 +16,10 @@ class SutoriElementText extends SutoriElement {
 
 	static Parse(element: HTMLElement) {
 		const result = new SutoriElementText();
-		result.Text = element.textContent;
+		const element_ex = element as HTMLElementEx;
 		result.ParseExtraAttributes(element, ['lang']);
-
-		if (element.hasAttribute('lang')) {
-			const lang = element.attributes['lang'].textContent;
-			result.ContentCulture = SutoriTools.ParseCulture(lang);
-		}
-
+		result.Text = element.textContent;
+		result.ContentCulture = element_ex.readAttributeCulture('lang');
 		return result;
 	}
 }

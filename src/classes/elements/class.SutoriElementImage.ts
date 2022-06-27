@@ -26,25 +26,12 @@ class SutoriElementImage extends SutoriElement {
 
 	static Parse(element: HTMLElement) {
 		const result = new SutoriElementImage();
-		result.ParseExtraAttributes(element, ['actor', 'resource', 'purpose', 'lang']);
-
-		if (element.hasAttribute('actor')) {
-			result.Actor = element.attributes['actor'].textContent;
-		}
-
-		if (element.hasAttribute('resource')) {
-			result.ResourceID = element.attributes['resource'].textContent;
-		}
-
-		if (element.hasAttribute('for')) {
-			result.For = element.attributes['for'].textContent;
-		}
-
-		if (element.hasAttribute('lang')) {
-			const lang = element.attributes['lang'].textContent;
-			result.ContentCulture = SutoriTools.ParseCulture(lang);
-		}
-
+		const element_ex = element as HTMLElementEx;
+		result.ParseExtraAttributes(element, ['actor', 'for', 'resource', 'lang']);
+		result.Actor = element_ex.readAttribute('actor');
+		result.For = element_ex.readAttribute('for');
+		result.ResourceID = element_ex.readAttribute('resource');
+		result.ContentCulture = element_ex.readAttributeCulture('lang');
 		return result;
 	}
 

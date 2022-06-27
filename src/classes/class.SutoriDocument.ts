@@ -111,24 +111,13 @@ class SutoriDocument {
 
 		xml.querySelectorAll('moments moment').forEach((moment_e: HTMLElement) => {
 			const moment = new SutoriMoment();
-
-			if (moment_e.hasAttribute('id')) {
-				moment.ID = moment_e.attributes['id'].textContent;
-			}
-
-			if (moment_e.hasAttribute('goto')) {
-				moment.Goto = moment_e.attributes['goto'].textContent;
-			}
-
-			if (moment_e.hasAttribute('actor')) {
-				moment.Actor = moment_e.attributes['actor'].textContent;
-			}
-
-			if (moment_e.hasAttribute('clear')) {
-				moment.Clear = SutoriTools.ParseBool(moment_e.attributes['clear'].textContent);
-			}
+			const moment_ex = moment_e as HTMLElementEx;
 
 			self.AddMomentAttributes(moment, moment_e, ['id', 'goto', 'actor', 'clear']);
+			moment.ID = moment_ex.readAttribute('id');
+			moment.Goto = moment_ex.readAttribute('goto');
+			moment.Actor = moment_ex.readAttribute('actor');
+			moment.Clear = moment_ex.readAttributeBool('clear');
 
 			moment_e.querySelectorAll(':scope > *').forEach(async (element_e: HTMLElement) => {
 				switch (element_e.tagName) {

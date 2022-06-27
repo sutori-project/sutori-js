@@ -22,8 +22,8 @@ class SutoriElementLoad extends SutoriElement {
 
 	static Parse(element: HTMLElement) {
 		const result = new SutoriElementLoad();
-		result.Path = element.textContent;
 		result.ParseExtraAttributes(element, ['mode']);
+		result.Path = element.textContent;
 		return result;
 	}
 }

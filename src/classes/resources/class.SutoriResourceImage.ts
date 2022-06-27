@@ -23,20 +23,12 @@ class SutoriResourceImage extends SutoriResource {
 
 	static Parse(element: HTMLElement) {
 		const result = new SutoriResourceImage();
+		const element_ex = element as HTMLElementEx;
 		result.ParseExtraAttributes(element, ['id', 'name', 'src']);
-
-		if (element.hasAttribute('id')) {
-			result.ID = element.attributes['id'].textContent;
-		}
-
-		if (element.hasAttribute('name')) {
-			result.Name = element.attributes['name'].textContent;
-		}
-
-		if (element.hasAttribute('src')) {
-			result.Src = element.attributes['src'].textContent;
-		}
-
+		result.ID = element_ex.readAttribute('id');
+		result.Name = element_ex.readAttribute('name');
+		result.Src = element_ex.readAttribute('src');
+		result.Preload = element_ex.readAttributeBool('preload');
 		return result;
 	}
 }

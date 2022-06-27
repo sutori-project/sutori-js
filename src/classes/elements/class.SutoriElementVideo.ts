@@ -2,8 +2,20 @@
  * Describes a video moment element.
  */
 class SutoriElementVideo extends SutoriElement {
+	/**
+	 * The associated actor id.
+	 */
 	Actor?: string;
-	Src: string;
+
+	/**
+	 * The purpose of this image. For example; avatar, background etc...
+	 */
+	For?: string;
+ 
+	/**
+	 * The resource id for the image data.
+	 */
+	ResourceID?: string;
 
 
 	constructor() {
@@ -14,18 +26,12 @@ class SutoriElementVideo extends SutoriElement {
 
 	static Parse(element: HTMLElement) {
 		const result = new SutoriElementVideo();
-		result.Src = element.textContent;
-		result.ParseExtraAttributes(element, ['actor', 'lang']);
-
-		if (element.hasAttribute('actor')) {
-			result.Actor = element.attributes['actor'].textContent;
-		}
-
-		if (element.hasAttribute('lang')) {
-			const lang = element.attributes['lang'].textContent;
-			result.ContentCulture = SutoriTools.ParseCulture(lang);
-		}
-	
+		const element_ex = element as HTMLElementEx;
+		result.ParseExtraAttributes(element, ['actor', 'for', 'resource', 'lang']);
+		result.Actor = element_ex.readAttribute('actor');
+		result.For = element_ex.readAttribute('for');
+		result.ResourceID = element_ex.readAttribute('resource');
+		result.ContentCulture = element_ex.readAttributeCulture('lang');
 		return result;
 	}
 

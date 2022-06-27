@@ -34,27 +34,12 @@ class SutoriElementOption extends SutoriElement {
     
 	static Parse(element: HTMLElement) {
 		const result = new SutoriElementOption();
-		result.Text = element.textContent;
+		const element_ex = element as HTMLElementEx;
 		result.ParseExtraAttributes(element, ['lang', 'target', 'solver', 'solver_callback']);
-
-		if (element.hasAttribute('lang')) {
-			const lang = element.attributes['lang'].textContent;
-			result.ContentCulture = SutoriTools.ParseCulture(lang);
-		}
-
-		if (element.hasAttribute('target')) {
-			result.Target = element.attributes['target'].textContent;
-		}
-
-		if (element.hasAttribute('solver')) {
-			const solver = element.attributes['solver'].textContent;
-			result.Solver = SutoriTools.ParseSolver(solver);
-		}
-
-		if (element.hasAttribute('solver_callback')) {
-			result.Target = element.attributes['solver_callback'].textContent;
-		}
-
+		result.Text = element.textContent;
+		result.Target = element_ex.readAttribute('target');
+		result.Solver = element_ex.readAttributeSolver('solver');
+		result.SolverCallback = element_ex.readAttribute('solver_callback');
 		return result;
 	}
 }
