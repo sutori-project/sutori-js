@@ -24,26 +24,27 @@ Here is an example of a basic sutori XML document:
 
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
-<document xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-	<moments>
-		<moment>
-			<text>Which door do you want to open?</text>
-			<option target="door1">Door 1</option>
-			<option target="door2">Door 2</option>
-		</moment>
+<document xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+   <moments>
+      <moment>
+         <text>Which door do you want to open?</text>
+         <option target="door1">Door 1</option>
+         <option target="door2">Door 2</option>
+      </moment>
 
-		<moment id="door1" clear="true" goto="end">
-			<text>You picked door1</text>
-		</moment>
+      <moment id="door1" clear="true" goto="end">
+         <text>You picked door1</text>
+      </moment>
 
-		<moment id="door2" clear="true" goto="end">
-			<text>You picked door2</text>
-		</moment>
+      <moment id="door2" clear="true" goto="end">
+         <text>You picked door2</text>
+      </moment>
 
-		<moment id="end">
-			<text>This is the end</text>
-		</moment>
-	</moments>
+      <moment id="end">
+         <text>This is the end</text>
+      </moment>
+   </moments>
 </document>
 ```
 
