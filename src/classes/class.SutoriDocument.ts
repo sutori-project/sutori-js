@@ -127,14 +127,8 @@ class SutoriDocument {
 					case 'option':
 						moment.Elements.push(SutoriElementOption.Parse(element_e));
 						break;
-					case 'image':
-						moment.Elements.push(SutoriElementImage.Parse(element_e));
-						break;
-					case 'audio':
-						moment.Elements.push(SutoriElementAudio.Parse(element_e));
-						break;
-					case 'video':
-						moment.Elements.push(SutoriElementVideo.Parse(element_e));
+					case 'media':
+						moment.Elements.push(SutoriElementMedia.Parse(element_e));
 						break;
 					case 'load':
 						moment.Elements.push(SutoriElementLoad.Parse(element_e));
@@ -280,13 +274,12 @@ class SutoriDocument {
 					if (!SutoriTools.IsEmptyString(option.Target)) oe.setAttribute('target', option.Target);
 					if (!SutoriTools.IsEmptyString(option.SolverCallback)) oe.setAttribute('solver', option.SolverCallback);
 				}
-				else if (element instanceof SutoriElementImage)
+				else if (element instanceof SutoriElementMedia)
 				{
-					const image = element as SutoriElementImage;
+					const image = element as SutoriElementMedia;
 					const ie = momentElement.appendChild(doc.createElement('image')) as HTMLElement;
 					if (image.ContentCulture !== SutoriCulture.None) ie.setAttribute('lang', image.ContentCulture);
 					if (!SutoriTools.IsEmptyString(image.ResourceID)) ie.setAttribute('resource', image.ResourceID);
-					if (!SutoriTools.IsEmptyString(image.Actor)) ie.setAttribute('actor', image.Actor);
 					if (!SutoriTools.IsEmptyString(image.For)) ie.setAttribute('for', image.For);
 				}
 				else if (element instanceof SutoriElementSet)

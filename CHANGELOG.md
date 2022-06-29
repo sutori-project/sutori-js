@@ -1,3 +1,7 @@
+## 0.0.7 - 29th June 2022
+
+- Simplified elements by replacing `<image>`, `<video>` and `<audio>` with just  `<media>`.
+
 ## 0.0.6 - 27th June 2022
 
 - Fixed the new attribute loader system, attributes are read correctly now.

@@ -1,17 +1,12 @@
 /**
- * Describes a video moment element.
+ * Describes an image moment element.
  */
-class SutoriElementVideo extends SutoriElement {
-	/**
-	 * The associated actor id.
-	 */
-	Actor?: string;
-
+class SutoriElementMedia extends SutoriElement {
 	/**
 	 * The purpose of this image. For example; avatar, background etc...
 	 */
 	For?: string;
- 
+
 	/**
 	 * The resource id for the image data.
 	 */
@@ -25,25 +20,12 @@ class SutoriElementVideo extends SutoriElement {
 
 
 	static Parse(element: HTMLElement) {
-		const result = new SutoriElementVideo();
+		const result = new SutoriElementMedia();
 		const element_ex = new HTMLElementEx(element);
 		result.ParseExtraAttributes(element, ['actor', 'for', 'resource', 'lang']);
-		result.Actor = element_ex.readAttribute('actor');
 		result.For = element_ex.readAttribute('for');
 		result.ResourceID = element_ex.readAttribute('resource');
 		result.ContentCulture = element_ex.readAttributeCulture('lang');
 		return result;
 	}
-
-
-   /**
-    * Try to get an associated actor for this element. 
-    * @param document The owner document.
-    */
-	 GetAssociatedActor(document :SutoriDocument) : SutoriActor {
-		// return null if no actor attribute is set.
-		if (this.Actor == null) return null;
-		// find the actor.
-		return document.Actors.find(t => t.ID == this.Actor);
-   }
 }

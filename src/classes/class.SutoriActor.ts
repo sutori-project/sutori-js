@@ -32,14 +32,8 @@ class SutoriActor {
                 case 'text':
                     result.Elements.push(SutoriElementText.Parse(element_e));
                     break;
-                case 'image':
-                    result.Elements.push(SutoriElementImage.Parse(element_e));
-                    break;
-                case 'audio':
-                    result.Elements.push(SutoriElementAudio.Parse(element_e));
-                    break;
-                case 'video':
-                    result.Elements.push(SutoriElementVideo.Parse(element_e));
+                case 'media':
+                    result.Elements.push(SutoriElementMedia.Parse(element_e));
                     break;
             }
         });

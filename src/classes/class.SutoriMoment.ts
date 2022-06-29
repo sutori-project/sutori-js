@@ -130,32 +130,12 @@ class SutoriMoment {
 
 
 	/**
-	 * Get an array of image elements.
+	 * Get an array of media elements.
 	 * @param culture The SutoriCulture, default is: SutoriCulture.None
 	 * @returns An array of image elements.
 	 */
-	GetImages(culture?: SutoriCulture) : Array<SutoriElementImage> {
-		return this.GetElements(culture, SutoriElementImage);
-	}
-
-
-	/**
-	 * Get an array of audio elements.
-	 * @param culture The SutoriCulture, default is: SutoriCulture.None
-	 * @returns An array of audio elements.
-	 */
-	GetAudio(culture?: SutoriCulture) : Array<SutoriElementAudio> {
-		return this.GetElements(culture, SutoriElementAudio);
-	}
-
-
-	/**
-	 * Get an array of video elements.
-	 * @param culture The SutoriCulture, default is: SutoriCulture.None
-	 * @returns An array of video elements.
-	 */
-	GetVideos(culture?: SutoriCulture) : Array<SutoriElementVideo> {
-		return this.GetElements(culture, SutoriElementVideo);
+	GetMedia(culture?: SutoriCulture) : Array<SutoriElementMedia> {
+		return this.GetElements(culture, SutoriElementMedia);
 	}
 
 

@@ -11,9 +11,7 @@
 		<image id="player-avatar" src="images/player.png" />
 	</resources>
 	<actors>
-		<actor id="player" name="The Player">
-			<image for="avatar" resource="player-avatar" />
-		</actor>
+		<actor id="player" name="The Player" />
 	</actors>
 	<moments>
 
@@ -32,7 +30,7 @@
 			<text lang="fr-FR">Quelle porte voulez-vous ouvrir?</text>
 			<option lang="fr-FR" target="door1">Porte 1</option>
 			<option lang="fr-FR" target="door2">Porte 2</option>
-			<image resource="background-1" for="background" />
+			<media resource="background-1" for="background" />
 		</moment>
 
 		<moment id="door1" clear="true" goto="end">

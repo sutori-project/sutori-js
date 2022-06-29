@@ -51,14 +51,8 @@ class SutoriActor {
                 case 'text':
                     result.Elements.push(SutoriElementText.Parse(element_e));
                     break;
-                case 'image':
-                    result.Elements.push(SutoriElementImage.Parse(element_e));
-                    break;
-                case 'audio':
-                    result.Elements.push(SutoriElementAudio.Parse(element_e));
-                    break;
-                case 'video':
-                    result.Elements.push(SutoriElementVideo.Parse(element_e));
+                case 'media':
+                    result.Elements.push(SutoriElementMedia.Parse(element_e));
                     break;
             }
         });
@@ -107,7 +101,7 @@ class SutoriDocument {
      * @param uri The uri location of the XML file to load.
      * @returns The loaded document.
      */
-    static async LoadXml(uri) {
+    static async LoadXmlFile(uri) {
         // create a new document.
         const result = new SutoriDocument();
         // load the document here.
@@ -176,14 +170,8 @@ class SutoriDocument {
                     case 'option':
                         moment.Elements.push(SutoriElementOption.Parse(element_e));
                         break;
-                    case 'image':
-                        moment.Elements.push(SutoriElementImage.Parse(element_e));
-                        break;
-                    case 'audio':
-                        moment.Elements.push(SutoriElementAudio.Parse(element_e));
-                        break;
-                    case 'video':
-                        moment.Elements.push(SutoriElementVideo.Parse(element_e));
+                    case 'media':
+                        moment.Elements.push(SutoriElementMedia.Parse(element_e));
                         break;
                     case 'load':
                         moment.Elements.push(SutoriElementLoad.Parse(element_e));
@@ -326,15 +314,13 @@ class SutoriDocument {
                     if (!SutoriTools.IsEmptyString(option.SolverCallback))
                         oe.setAttribute('solver', option.SolverCallback);
                 }
-                else if (element instanceof SutoriElementImage) {
+                else if (element instanceof SutoriElementMedia) {
                     const image = element;
                     const ie = momentElement.appendChild(doc.createElement('image'));
                     if (image.ContentCulture !== SutoriCulture.None)
                         ie.setAttribute('lang', image.ContentCulture);
                     if (!SutoriTools.IsEmptyString(image.ResourceID))
                         ie.setAttribute('resource', image.ResourceID);
-                    if (!SutoriTools.IsEmptyString(image.Actor))
-                        ie.setAttribute('actor', image.Actor);
                     if (!SutoriTools.IsEmptyString(image.For))
                         ie.setAttribute('for', image.For);
                 }
@@ -557,28 +543,12 @@ class SutoriMoment {
         return this.GetElements(culture, SutoriElementOption);
     }
     /**
-     * Get an array of image elements.
+     * Get an array of media elements.
      * @param culture The SutoriCulture, default is: SutoriCulture.None
      * @returns An array of image elements.
      */
-    GetImages(culture) {
-        return this.GetElements(culture, SutoriElementImage);
-    }
-    /**
-     * Get an array of audio elements.
-     * @param culture The SutoriCulture, default is: SutoriCulture.None
-     * @returns An array of audio elements.
-     */
-    GetAudio(culture) {
-        return this.GetElements(culture, SutoriElementAudio);
-    }
-    /**
-     * Get an array of video elements.
-     * @param culture The SutoriCulture, default is: SutoriCulture.None
-     * @returns An array of video elements.
-     */
-    GetVideos(culture) {
-        return this.GetElements(culture, SutoriElementVideo);
+    GetMedia(culture) {
+        return this.GetElements(culture, SutoriElementMedia);
     }
     /**
      * Get an array of setter elements.
@@ -708,66 +678,6 @@ class SutoriTools {
     }
 }
 /**
- * Describes an audio moment element.
- */
-class SutoriElementAudio extends SutoriElement {
-    constructor() {
-        super();
-        this.ContentCulture = SutoriCulture.None;
-    }
-    static Parse(element) {
-        const result = new SutoriElementAudio();
-        const element_ex = new HTMLElementEx(element);
-        result.ParseExtraAttributes(element, ['actor', 'for', 'resource', 'lang']);
-        result.Actor = element_ex.readAttribute('actor');
-        result.For = element_ex.readAttribute('for');
-        result.ResourceID = element_ex.readAttribute('resource');
-        result.ContentCulture = element_ex.readAttributeCulture('lang');
-        return result;
-    }
-    /**
-     * Try to get an associated actor for this element.
-     * @param document The owner document.
-     */
-    GetAssociatedActor(document) {
-        // return null if no actor attribute is set.
-        if (this.Actor == null)
-            return null;
-        // find the actor.
-        return document.Actors.find(t => t.ID == this.Actor);
-    }
-}
-/**
- * Describes an image moment element.
- */
-class SutoriElementImage extends SutoriElement {
-    constructor() {
-        super();
-        this.ContentCulture = SutoriCulture.None;
-    }
-    static Parse(element) {
-        const result = new SutoriElementImage();
-        const element_ex = new HTMLElementEx(element);
-        result.ParseExtraAttributes(element, ['actor', 'for', 'resource', 'lang']);
-        result.Actor = element_ex.readAttribute('actor');
-        result.For = element_ex.readAttribute('for');
-        result.ResourceID = element_ex.readAttribute('resource');
-        result.ContentCulture = element_ex.readAttributeCulture('lang');
-        return result;
-    }
-    /**
-     * Try to get an associated actor for this element.
-     * @param document The owner document.
-     */
-    GetAssociatedActor(document) {
-        // return null if no actor attribute is set.
-        if (this.Actor == null)
-            return null;
-        // find the actor.
-        return document.Actors.find(t => t.ID == this.Actor);
-    }
-}
-/**
  * Describes a load moment element that loads further moments.
  */
 class SutoriElementLoad extends SutoriElement {
@@ -780,6 +690,24 @@ class SutoriElementLoad extends SutoriElement {
         const result = new SutoriElementLoad();
         result.ParseExtraAttributes(element, ['mode']);
         result.Path = element.textContent;
+        return result;
+    }
+}
+/**
+ * Describes an image moment element.
+ */
+class SutoriElementMedia extends SutoriElement {
+    constructor() {
+        super();
+        this.ContentCulture = SutoriCulture.None;
+    }
+    static Parse(element) {
+        const result = new SutoriElementMedia();
+        const element_ex = new HTMLElementEx(element);
+        result.ParseExtraAttributes(element, ['actor', 'for', 'resource', 'lang']);
+        result.For = element_ex.readAttribute('for');
+        result.ResourceID = element_ex.readAttribute('resource');
+        result.ContentCulture = element_ex.readAttributeCulture('lang');
         return result;
     }
 }
@@ -857,36 +785,6 @@ class SutoriElementTrigger extends SutoriElement {
         result.Body = element.textContent;
         result.Action = element_ex.readAttribute('action');
         return result;
-    }
-}
-/**
- * Describes a video moment element.
- */
-class SutoriElementVideo extends SutoriElement {
-    constructor() {
-        super();
-        this.ContentCulture = SutoriCulture.None;
-    }
-    static Parse(element) {
-        const result = new SutoriElementVideo();
-        const element_ex = new HTMLElementEx(element);
-        result.ParseExtraAttributes(element, ['actor', 'for', 'resource', 'lang']);
-        result.Actor = element_ex.readAttribute('actor');
-        result.For = element_ex.readAttribute('for');
-        result.ResourceID = element_ex.readAttribute('resource');
-        result.ContentCulture = element_ex.readAttributeCulture('lang');
-        return result;
-    }
-    /**
-     * Try to get an associated actor for this element.
-     * @param document The owner document.
-     */
-    GetAssociatedActor(document) {
-        // return null if no actor attribute is set.
-        if (this.Actor == null)
-            return null;
-        // find the actor.
-        return document.Actors.find(t => t.ID == this.Actor);
     }
 }
 /**
